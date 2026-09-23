@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080b14">
   <title>Study AI</title>
 
   <style>
@@ -10,13 +11,18 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: Arial, sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
     }
 
     body {
       background: #080b14;
       color: white;
       min-height: 100vh;
+    }
+
+    button,
+    textarea {
+      font-family: inherit;
     }
 
     .app {
@@ -49,6 +55,22 @@
       border-radius: 20px;
       font-size: 12px;
       color: #aeb7d0;
+      transition: .2s;
+    }
+
+    .status.online {
+      color: #77e6a5;
+      border-color: #245c42;
+    }
+
+    .status.thinking {
+      color: #ffd76a;
+      border-color: #66521f;
+    }
+
+    .status.error {
+      color: #ff7b7b;
+      border-color: #633333;
     }
 
     .hero {
@@ -83,7 +105,7 @@
     textarea {
       width: 100%;
       min-height: 105px;
-      resize: none;
+      resize: vertical;
       background: transparent;
       border: none;
       outline: none;
@@ -101,6 +123,7 @@
       justify-content: space-between;
       align-items: center;
       margin-top: 12px;
+      gap: 10px;
     }
 
     .upload-btn {
@@ -121,6 +144,13 @@
       border-radius: 13px;
       font-weight: bold;
       cursor: pointer;
+      flex: 1;
+      max-width: 150px;
+    }
+
+    .send-btn:disabled {
+      opacity: .55;
+      cursor: not-allowed;
     }
 
     .send-btn:active,
@@ -139,13 +169,29 @@
       border-radius: 14px;
       overflow: hidden;
       border: 1px solid #30384f;
+      position: relative;
     }
 
     .preview img {
       width: 100%;
-      max-height: 220px;
+      max-height: 260px;
       object-fit: contain;
       background: #080b14;
+      display: block;
+    }
+
+    .remove-image {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      border: none;
+      background: rgba(0,0,0,.75);
+      color: white;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 16px;
     }
 
     .section-title {
@@ -194,6 +240,11 @@
       gap: 8px;
       overflow-x: auto;
       padding: 5px 18px 15px;
+      scrollbar-width: none;
+    }
+
+    .subjects::-webkit-scrollbar {
+      display: none;
     }
 
     .subject {
@@ -204,6 +255,7 @@
       border: 1px solid #252c41;
       color: #aeb7d0;
       font-size: 13px;
+      cursor: pointer;
     }
 
     .subject.active {
@@ -215,13 +267,73 @@
     .message {
       display: none;
       margin: 18px;
-      padding: 15px;
+      padding: 17px;
       border-radius: 16px;
       background: #151b2b;
       border: 1px solid #30384f;
       color: #dbe0ef;
-      line-height: 1.5;
+      line-height: 1.6;
       font-size: 14px;
+      overflow-wrap: break-word;
+    }
+
+    .message strong {
+      color: #ffffff;
+    }
+
+    .message h3 {
+      margin: 12px 0 7px;
+      color: #a996ff;
+      font-size: 16px;
+    }
+
+    .message ul {
+      padding-left: 20px;
+      margin: 7px 0;
+    }
+
+    .message ol {
+      padding-left: 20px;
+      margin: 7px 0;
+    }
+
+    .loading {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dots {
+      display: inline-flex;
+      gap: 4px;
+    }
+
+    .dots span {
+      width: 6px;
+      height: 6px;
+      background: #8d73ff;
+      border-radius: 50%;
+      animation: bounce 1.2s infinite;
+    }
+
+    .dots span:nth-child(2) {
+      animation-delay: .15s;
+    }
+
+    .dots span:nth-child(3) {
+      animation-delay: .3s;
+    }
+
+    @keyframes bounce {
+      0%, 80%, 100% {
+        transform: translateY(0);
+        opacity: .4;
+      }
+
+      40% {
+        transform: translateY(-5px);
+        opacity: 1;
+      }
     }
 
     footer {
@@ -229,6 +341,16 @@
       color: #555e76;
       font-size: 11px;
       padding: 30px 15px 10px;
+    }
+
+    @media (max-width: 390px) {
+      .features {
+        grid-template-columns: 1fr;
+      }
+
+      .hero h1 {
+        font-size: 29px;
+      }
     }
   </style>
 </head>
@@ -239,37 +361,55 @@
 
   <header>
     <div class="logo">🤖 Study<span>AI</span></div>
-    <div class="status">● Pronto</div>
+    <div class="status" id="status">● Pronto</div>
   </header>
 
   <section class="hero">
     <h1>Studia meglio.<br><span>Impara davvero.</span></h1>
+
     <p>
-      Invia una domanda, una foto del compito o scegli uno strumento.
-      Study AI ti aiuterà a capire e studiare.
+      Fai una domanda, carica una foto del compito
+      oppure scegli uno strumento per studiare.
     </p>
   </section>
 
   <div class="chat-box">
 
-    <textarea id="question"
-      placeholder="Scrivi qui la tua domanda..."></textarea>
+    <textarea
+      id="question"
+      placeholder="Scrivi qui la tua domanda..."
+      maxlength="12000"></textarea>
 
     <div class="chat-actions">
 
       <label class="upload-btn">
         📸 Foto
-        <input type="file" id="fileInput" accept="image/*">
+        <input
+          type="file"
+          id="fileInput"
+          accept="image/jpeg,image/png,image/webp,image/heic,image/heif">
       </label>
 
-      <button class="send-btn" onclick="sendQuestion()">
+      <button
+        class="send-btn"
+        id="sendBtn"
+        onclick="sendQuestion()">
         Invia ➜
       </button>
 
     </div>
 
     <div class="preview" id="preview">
-      <img id="previewImage">
+
+      <img id="previewImage" alt="Foto del compito">
+
+      <button
+        class="remove-image"
+        onclick="removeImage()"
+        aria-label="Rimuovi immagine">
+        ✕
+      </button>
+
     </div>
 
   </div>
@@ -278,52 +418,132 @@
 
   <div class="features">
 
-    <button class="feature" onclick="selectTool('Correggi il mio compito')">
+    <button
+      class="feature"
+      onclick="selectTool('Correggi il mio compito. Spiegami ogni errore e mostrami come correggerlo.')">
+
       <div class="feature-icon">✏️</div>
-      <div class="feature-title">Correggi compito</div>
-      <div class="feature-text">Trova errori e spiegami come correggerli.</div>
+
+      <div class="feature-title">
+        Correggi compito
+      </div>
+
+      <div class="feature-text">
+        Trova errori e spiegami come correggerli.
+      </div>
+
     </button>
 
-    <button class="feature" onclick="selectTool('Fammi un riassunto')">
+    <button
+      class="feature"
+      onclick="selectTool('Fammi un riassunto chiaro e completo del testo che ti darò.')">
+
       <div class="feature-icon">📚</div>
-      <div class="feature-title">Riassunto</div>
-      <div class="feature-text">Trasforma un testo lungo in un riassunto.</div>
+
+      <div class="feature-title">
+        Riassunto
+      </div>
+
+      <div class="feature-text">
+        Trasforma un testo lungo in un riassunto.
+      </div>
+
     </button>
 
-    <button class="feature" onclick="selectTool('Crea una mappa concettuale')">
+    <button
+      class="feature"
+      onclick="selectTool('Crea una mappa concettuale ordinata e facile da studiare.')">
+
       <div class="feature-icon">🧠</div>
-      <div class="feature-title">Mappa concettuale</div>
-      <div class="feature-text">Organizza gli argomenti in modo semplice.</div>
+
+      <div class="feature-title">
+        Mappa concettuale
+      </div>
+
+      <div class="feature-text">
+        Organizza gli argomenti in modo semplice.
+      </div>
+
     </button>
 
-    <button class="feature" onclick="selectTool('Crea uno schema per studiare')">
+    <button
+      class="feature"
+      onclick="selectTool('Crea uno schema ordinato, completo e facile da memorizzare.')">
+
       <div class="feature-icon">📝</div>
-      <div class="feature-title">Schema</div>
-      <div class="feature-text">Crea uno schema ordinato e facile da memorizzare.</div>
+
+      <div class="feature-title">
+        Schema
+      </div>
+
+      <div class="feature-text">
+        Crea uno schema per studiare.
+      </div>
+
     </button>
 
-    <button class="feature" onclick="selectTool('Dammi le parole chiave da ricordare')">
+    <button
+      class="feature"
+      onclick="selectTool('Indicami le parole chiave e i concetti più importanti da ricordare.')">
+
       <div class="feature-icon">🔑</div>
-      <div class="feature-title">Parole chiave</div>
-      <div class="feature-text">Individua ciò che devi assolutamente ricordare.</div>
+
+      <div class="feature-title">
+        Parole chiave
+      </div>
+
+      <div class="feature-text">
+        Individua ciò che devi ricordare.
+      </div>
+
     </button>
 
-    <button class="feature" onclick="selectTool('Verifica queste informazioni sul web')">
+    <button
+      class="feature"
+      onclick="selectTool('Verifica le informazioni che ti fornirò. Se non puoi verificarle, dimmelo chiaramente e non inventare.')">
+
       <div class="feature-icon">🌐</div>
-      <div class="feature-title">Verifica sul web</div>
-      <div class="feature-text">Controlla le informazioni e trova fonti.</div>
+
+      <div class="feature-title">
+        Verifica sul web
+      </div>
+
+      <div class="feature-text">
+        Controlla informazioni e fonti.
+      </div>
+
     </button>
 
-    <button class="feature" onclick="selectTool('Spiegami questo argomento in modo semplice')">
+    <button
+      class="feature"
+      onclick="selectTool('Spiegami questo argomento in modo molto semplice, passo dopo passo, come farebbe un insegnante.')">
+
       <div class="feature-icon">💡</div>
-      <div class="feature-title">Spiegazione</div>
-      <div class="feature-text">Spiegazioni semplici, passo dopo passo.</div>
+
+      <div class="feature-title">
+        Spiegazione
+      </div>
+
+      <div class="feature-text">
+        Impara passo dopo passo.
+      </div>
+
     </button>
 
-    <button class="feature" onclick="selectTool('Fammi delle domande per ripassare')">
+    <button
+      class="feature"
+      onclick="selectTool('Fammi delle domande per ripassare questo argomento. Dopo ogni mia risposta dimmi se è corretta e spiegami eventuali errori.')">
+
       <div class="feature-icon">🎯</div>
-      <div class="feature-title">Ripasso</div>
-      <div class="feature-text">Allenati con domande e quiz.</div>
+
+      <div class="feature-title">
+        Ripasso
+      </div>
+
+      <div class="feature-text">
+        Allenati con domande e quiz.
+      </div>
+
     </button>
 
   </div>
@@ -331,6 +551,7 @@
   <div class="section-title">📖 Materia</div>
 
   <div class="subjects">
+
     <div class="subject active">Generale</div>
     <div class="subject">Matematica</div>
     <div class="subject">Italiano</div>
@@ -338,6 +559,11 @@
     <div class="subject">Geografia</div>
     <div class="subject">Scienze</div>
     <div class="subject">Inglese</div>
+    <div class="subject">Fisica</div>
+    <div class="subject">Chimica</div>
+    <div class="subject">Scienze e Tecnologie Applicate</div>
+
+
   </div>
 
   <div class="message" id="message"></div>
@@ -348,84 +574,175 @@
 
 </div>
 
+
 <script>
+
+  /*
+  ============================================================
+  CONFIGURAZIONE
+  ============================================================
+
+  SOSTITUISCI SOLO IL TESTO TRA LE VIRGOLETTE
+  CON L'INDIRIZZO DEL TUO WORKER CLOUDFLARE.
+
+  ESEMPIO:
+
+  const API_URL = "https://study-ai.xxxxx.workers.dev";
+  */
+
+  const API_URL = "study-ai.f4b10giannoni .workers.dev";
+
 
   const question = document.getElementById("question");
   const fileInput = document.getElementById("fileInput");
   const preview = document.getElementById("preview");
   const previewImage = document.getElementById("previewImage");
   const message = document.getElementById("message");
+  const sendBtn = document.getElementById("sendBtn");
+  const status = document.getElementById("status");
 
-  fileInput.addEventListener("change", function() {
+  let selectedImage = null;
+  let selectedMimeType = null;
+
+
+  /*
+  ============================================================
+  FOTO
+  ============================================================
+  */
+
+  fileInput.addEventListener("change", async function() {
 
     const file = this.files[0];
 
-    if (!file) return;
-
-    const reader = new FileReader();
-
-    reader.onload = function(e) {
-      previewImage.src = e.target.result;
-      preview.style.display = "block";
-    };
-
-    reader.readAsDataURL(file);
-
-    question.value = "Analizza questa foto e aiutami a svolgere correttamente il compito.";
-  });
-
-  function selectTool(text) {
-    question.value = text;
-    question.focus();
-
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
-  }
-
-  function sendQuestion() {
-
-    const text = question.value.trim();
-
-    if (!text && !fileInput.files.length) {
-      showMessage("✏️ Scrivi una domanda oppure carica una foto del compito.");
+    if (!file) {
       return;
     }
 
-    showMessage(
-      "✅ Richiesta ricevuta!<br><br>" +
-      "Questa è la prima versione dell'app. " +
-      "Il prossimo passaggio sarà collegare l'intelligenza artificiale vera, " +
-      "così potrà leggere le foto, rispondere alle domande, correggere i compiti " +
-      "e verificare le informazioni sul web."
-    );
-  }
+    try {
 
-  function showMessage(text) {
-    message.innerHTML = text;
-    message.style.display = "block";
+      const compressed = await compressImage(file);
 
-    message.scrollIntoView({
-      behavior: "smooth",
-      block: "center"
-    });
-  }
+      selectedImage = compressed.base64;
+      selectedMimeType = compressed.mimeType;
 
-  document.querySelectorAll(".subject").forEach(subject => {
+      previewImage.src =
+        "data:" +
+        selectedMimeType +
+        ";base64," +
+        selectedImage;
 
-    subject.addEventListener("click", function() {
+      preview.style.display = "block";
 
-      document.querySelectorAll(".subject")
-        .forEach(s => s.classList.remove("active"));
+      if (!question.value.trim()) {
 
-      this.classList.add("active");
+        question.value =
+          "Analizza questa foto del mio compito. " +
+          "Leggi attentamente il contenuto e aiutami a svolgerlo correttamente. " +
+          "Spiegami anche gli eventuali errori.";
 
-    });
+      }
+
+    } catch (error) {
+
+      showMessage(
+        "❌ Non riesco a leggere questa immagine. " +
+        "Prova con una foto JPG o PNG."
+      );
+
+    }
 
   });
 
-</script>
 
-</body>
-</html>
+  /*
+  ============================================================
+  COMPRESSIONE FOTO
+  ============================================================
+  */
+
+  function compressImage(file) {
+
+    return new Promise((resolve, reject) => {
+
+      const reader = new FileReader();
+
+      reader.onload = function(event) {
+
+        const img = new Image();
+
+        img.onload = function() {
+
+          const maxSize = 1600;
+
+          let width = img.width;
+          let height = img.height;
+
+          if (width > height && width > maxSize) {
+
+            height =
+              Math.round(height * maxSize / width);
+
+            width = maxSize;
+
+          } else if (height > maxSize) {
+
+            width =
+              Math.round(width * maxSize / height);
+
+            height = maxSize;
+
+          }
+
+          const canvas =
+            document.createElement("canvas");
+
+          canvas.width = width;
+          canvas.height = height;
+
+          const ctx =
+            canvas.getContext("2d");
+
+          ctx.drawImage(
+            img,
+            0,
+            0,
+            width,
+            height
+          );
+
+          const dataUrl =
+            canvas.toDataURL(
+              "image/jpeg",
+              0.82
+            );
+
+          const base64 =
+            dataUrl.split(",")[1];
+
+          resolve({
+            base64: base64,
+            mimeType: "image/jpeg"
+          });
+
+        };
+
+        img.onerror = reject;
+
+        img.src = event.target.result;
+
+      };
+
+      reader.onerror = reject;
+
+      reader.readAsDataURL(file);
+
+    });
+
+  }
+
+
+  /*
+  ============================================================
+  RIMUOVI FOTO
+  =================================================
