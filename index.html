@@ -1,12 +1,19 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>Study AI</title>
 
   <style>
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -20,18 +27,43 @@
       min-height: 100vh;
     }
 
+    button,
+    textarea {
+      font-family: Arial, sans-serif;
+    }
+
     .app {
-      max-width: 600px;
+      max-width: 700px;
       margin: auto;
       min-height: 100vh;
       padding-bottom: 30px;
     }
 
+    /* HEADER */
+
     header {
-      padding: 22px 18px 15px;
+      padding: 18px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 10px;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .menu-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      border: 1px solid #30384f;
+      background: #111625;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
     }
 
     .logo {
@@ -50,10 +82,13 @@
       border-radius: 20px;
       font-size: 12px;
       color: #aeb7d0;
+      white-space: nowrap;
     }
 
+    /* HERO */
+
     .hero {
-      padding: 25px 18px 15px;
+      padding: 22px 18px 15px;
     }
 
     .hero h1 {
@@ -72,8 +107,106 @@
       font-size: 15px;
     }
 
+    /* CHAT */
+
+    .chat {
+      padding: 0 18px;
+    }
+
+    .chat-history {
+      display: flex;
+      flex-direction: column;
+      gap: 13px;
+      margin-bottom: 15px;
+    }
+
+    .chat-message {
+      max-width: 94%;
+      padding: 14px 16px;
+      border-radius: 18px;
+      line-height: 1.6;
+      font-size: 14px;
+      overflow-wrap: anywhere;
+    }
+
+    .user-message {
+      align-self: flex-end;
+      background: #6d50df;
+      border-bottom-right-radius: 5px;
+    }
+
+    .ai-message {
+      align-self: flex-start;
+      background: #151b2b;
+      border: 1px solid #30384f;
+      border-bottom-left-radius: 5px;
+    }
+
+    .message-image {
+      width: 100%;
+      max-width: 400px;
+      max-height: 320px;
+      object-fit: contain;
+      border-radius: 12px;
+      margin-bottom: 9px;
+      display: block;
+      background: #080b14;
+    }
+
+    /* FORMULE E CODICE */
+
+    .ai-message pre {
+      background: #080b14;
+      border: 1px solid #343b52;
+      border-radius: 12px;
+      padding: 13px;
+      margin: 10px 0;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      color: #e8eaf2;
+      font-family: monospace;
+      font-size: 13px;
+    }
+
+    .ai-message pre code {
+      font-family: monospace;
+    }
+
+    .ai-message code {
+      font-family: monospace;
+      background: #080b14;
+      border-radius: 5px;
+      padding: 2px 5px;
+    }
+
+    .ai-message h2 {
+      font-size: 20px;
+      margin: 14px 0 8px;
+    }
+
+    .ai-message h3 {
+      font-size: 17px;
+      margin: 13px 0 7px;
+      color: #b9aaff;
+    }
+
+    .ai-message strong {
+      color: white;
+    }
+
+    .ai-message ul,
+    .ai-message ol {
+      margin: 8px 0 8px 20px;
+    }
+
+    .ai-message li {
+      margin-bottom: 5px;
+    }
+
+    /* INPUT */
+
     .chat-box {
-      margin: 18px;
       background: #111625;
       border: 1px solid #252c41;
       border-radius: 22px;
@@ -83,7 +216,7 @@
 
     textarea {
       width: 100%;
-      min-height: 105px;
+      min-height: 90px;
       resize: none;
       background: transparent;
       border: none;
@@ -126,14 +259,8 @@
     }
 
     .send-btn:disabled {
-      opacity: .6;
+      opacity: .55;
       cursor: wait;
-    }
-
-    .send-btn:active,
-    .upload-btn:active,
-    .feature:active {
-      transform: scale(.97);
     }
 
     #fileInput {
@@ -153,26 +280,28 @@
       width: 100%;
       max-height: 260px;
       object-fit: contain;
-      background: #080b14;
       display: block;
+      background: #080b14;
     }
 
     .remove-image {
       position: absolute;
-      top: 8px;
       right: 8px;
-      border: none;
-      background: rgba(0,0,0,.7);
-      color: white;
+      top: 8px;
       width: 34px;
       height: 34px;
+      border: none;
       border-radius: 50%;
-      font-size: 18px;
+      background: rgba(0,0,0,.75);
+      color: white;
+      font-size: 21px;
       cursor: pointer;
     }
 
+    /* STRUMENTI */
+
     .section-title {
-      padding: 15px 18px 10px;
+      padding: 20px 18px 10px;
       font-size: 18px;
       font-weight: 700;
     }
@@ -192,7 +321,6 @@
       color: white;
       text-align: left;
       cursor: pointer;
-      transition: .15s;
     }
 
     .feature-icon {
@@ -211,6 +339,8 @@
       font-size: 12px;
       line-height: 1.3;
     }
+
+    /* MATERIE */
 
     .subjects {
       display: flex;
@@ -241,55 +371,14 @@
       color: white;
     }
 
-    .message {
-      display: none;
-      margin: 18px;
-      padding: 17px;
-      border-radius: 16px;
-      background: #151b2b;
-      border: 1px solid #30384f;
-      color: #dbe0ef;
-      line-height: 1.6;
-      font-size: 14px;
-      overflow-wrap: anywhere;
-    }
-
-    .message h2 {
-      font-size: 20px;
-      margin: 16px 0 8px;
-      color: white;
-    }
-
-    .message h3 {
-      font-size: 17px;
-      margin: 14px 0 7px;
-      color: #b9aaff;
-    }
-
-    .message strong {
-      color: white;
-    }
-
-    .message ul,
-    .message ol {
-      margin: 8px 0 8px 20px;
-    }
-
-    .message li {
-      margin-bottom: 5px;
-    }
-
-    .message code {
-      background: #0c101d;
-      padding: 2px 5px;
-      border-radius: 5px;
-    }
+    /* CARICAMENTO */
 
     .loading {
       display: none;
       align-items: center;
       gap: 8px;
       color: #aeb7d0;
+      padding: 10px 18px;
     }
 
     .dots {
@@ -314,6 +403,7 @@
     }
 
     @keyframes bounce {
+
       0%, 80%, 100% {
         transform: translateY(0);
         opacity: .4;
@@ -323,6 +413,115 @@
         transform: translateY(-5px);
         opacity: 1;
       }
+
+    }
+
+    /* CRONOLOGIA */
+
+    .history-panel {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 310px;
+      max-width: 88vw;
+      height: 100vh;
+      background: #0e1320;
+      border-right: 1px solid #30384f;
+      z-index: 1000;
+      transform: translateX(-100%);
+      transition: .25s;
+      padding: 18px;
+      overflow-y: auto;
+    }
+
+    .history-panel.open {
+      transform: translateX(0);
+    }
+
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .history-header h2 {
+      font-size: 19px;
+    }
+
+    .close-history {
+      border: none;
+      background: #1b2132;
+      color: white;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .new-chat-btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 12px;
+      background: #7c5cff;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      margin-bottom: 15px;
+    }
+
+    .history-item {
+      width: 100%;
+      text-align: left;
+      padding: 13px;
+      margin-bottom: 8px;
+      border-radius: 12px;
+      border: 1px solid #252c41;
+      background: #111625;
+      color: #dbe0ef;
+      cursor: pointer;
+    }
+
+    .history-item.active {
+      border-color: #7659ef;
+      background: #1b1830;
+    }
+
+    .history-title {
+      font-weight: bold;
+      font-size: 14px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .history-date {
+      margin-top: 5px;
+      color: #727b92;
+      font-size: 11px;
+    }
+
+    .delete-chat {
+      float: right;
+      border: none;
+      background: transparent;
+      color: #7d8498;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.55);
+      z-index: 999;
+    }
+
+    .overlay.show {
+      display: block;
     }
 
     footer {
@@ -332,7 +531,8 @@
       padding: 30px 15px 10px;
     }
 
-    @media (max-width: 400px) {
+    @media (max-width: 430px) {
+
       .features {
         grid-template-columns: 1fr;
       }
@@ -340,192 +540,423 @@
       .hero h1 {
         font-size: 29px;
       }
+
+      .status {
+        display: none;
+      }
+
     }
+
   </style>
+
 </head>
+
 
 <body>
 
+
+<!-- CRONOLOGIA -->
+
+<div
+  class="overlay"
+  id="overlay"
+  onclick="closeHistory()"
+></div>
+
+
+<div
+  class="history-panel"
+  id="historyPanel"
+>
+
+  <div class="history-header">
+
+    <h2>
+      💬 Le mie chat
+    </h2>
+
+    <button
+      class="close-history"
+      onclick="closeHistory()"
+    >
+      ×
+    </button>
+
+  </div>
+
+
+  <button
+    class="new-chat-btn"
+    onclick="newChat()"
+  >
+    ＋ Nuova chat
+  </button>
+
+
+  <div id="historyList"></div>
+
+</div>
+
+
 <div class="app">
 
+
+  <!-- HEADER -->
+
   <header>
-    <div class="logo">🤖 Study<span>AI</span></div>
-    <div class="status" id="status">● Pronto</div>
-  </header>
 
-  <section class="hero">
-    <h1>Studia meglio.<br><span>Impara davvero.</span></h1>
-
-    <p>
-      Invia una domanda, una foto del compito o scegli uno strumento.
-      Study AI ti aiuterà a capire, correggere e studiare.
-    </p>
-  </section>
-
-  <div class="chat-box">
-
-    <textarea
-      id="question"
-      placeholder="Scrivi qui la tua domanda..."
-    ></textarea>
-
-    <div class="chat-actions">
-
-      <label class="upload-btn">
-        📸 Foto
-        <input
-          type="file"
-          id="fileInput"
-          accept="image/*"
-        >
-      </label>
+    <div class="header-left">
 
       <button
-        class="send-btn"
-        id="sendBtn"
-        onclick="sendQuestion()"
+        class="menu-btn"
+        onclick="openHistory()"
       >
-        Invia ➜
+        ☰
       </button>
+
+      <div class="logo">
+        🤖 Study<span>AI</span>
+      </div>
 
     </div>
 
-    <div class="preview" id="preview">
 
-      <img id="previewImage" alt="Anteprima">
+    <div
+      class="status"
+      id="status"
+    >
+      ● Pronto
+    </div>
 
-      <button
-        class="remove-image"
-        onclick="removeImage()"
-        aria-label="Rimuovi immagine"
+  </header>
+
+
+  <!-- HERO -->
+
+  <section class="hero">
+
+    <h1>
+      Studia meglio.<br>
+      <span>Impara davvero.</span>
+    </h1>
+
+    <p>
+      Fai domande, invia foto dei compiti e continua
+      la conversazione finché non hai capito tutto.
+    </p>
+
+  </section>
+
+
+  <!-- CHAT -->
+
+  <div class="chat">
+
+    <div
+      class="chat-history"
+      id="chatHistory"
+    ></div>
+
+
+    <div class="chat-box">
+
+      <textarea
+        id="question"
+        placeholder="Scrivi qui la tua domanda..."
+      ></textarea>
+
+
+      <div class="chat-actions">
+
+        <label class="upload-btn">
+
+          📸 Foto
+
+          <input
+            type="file"
+            id="fileInput"
+            accept="image/*"
+          >
+
+        </label>
+
+
+        <button
+          class="send-btn"
+          id="sendBtn"
+          onclick="sendQuestion()"
+        >
+          Invia ➜
+        </button>
+
+      </div>
+
+
+      <div
+        class="preview"
+        id="preview"
       >
-        ×
-      </button>
+
+        <img
+          id="previewImage"
+          alt="Anteprima"
+        >
+
+        <button
+          class="remove-image"
+          onclick="removeImage()"
+        >
+          ×
+        </button>
+
+      </div>
 
     </div>
 
   </div>
 
-  <div class="section-title">📚 Cosa vuoi fare?</div>
+
+  <!-- STRUMENTI -->
+
+  <div class="section-title">
+    📚 Cosa vuoi fare?
+  </div>
+
 
   <div class="features">
+
 
     <button
       class="feature"
       onclick="selectTool('Correggi il mio compito e spiegami tutti gli errori')"
     >
-      <div class="feature-icon">✏️</div>
-      <div class="feature-title">Correggi compito</div>
+
+      <div class="feature-icon">
+        ✏️
+      </div>
+
+      <div class="feature-title">
+        Correggi compito
+      </div>
+
       <div class="feature-text">
         Trova gli errori e spiegami come correggerli.
       </div>
+
     </button>
+
 
     <button
       class="feature"
       onclick="selectTool('Fammi un riassunto chiaro e completo del testo')"
     >
-      <div class="feature-icon">📚</div>
-      <div class="feature-title">Riassunto</div>
+
+      <div class="feature-icon">
+        📚
+      </div>
+
+      <div class="feature-title">
+        Riassunto
+      </div>
+
       <div class="feature-text">
         Trasforma un testo lungo in un riassunto.
       </div>
+
     </button>
+
 
     <button
       class="feature"
       onclick="selectTool('Crea una mappa concettuale ordinata e facile da studiare')"
     >
-      <div class="feature-icon">🧠</div>
-      <div class="feature-title">Mappa concettuale</div>
+
+      <div class="feature-icon">
+        🧠
+      </div>
+
+      <div class="feature-title">
+        Mappa concettuale
+      </div>
+
       <div class="feature-text">
         Organizza gli argomenti in modo semplice.
       </div>
+
     </button>
+
 
     <button
       class="feature"
       onclick="selectTool('Crea uno schema ordinato per studiare questo argomento')"
     >
-      <div class="feature-icon">📝</div>
-      <div class="feature-title">Schema</div>
+
+      <div class="feature-icon">
+        📝
+      </div>
+
+      <div class="feature-title">
+        Schema
+      </div>
+
       <div class="feature-text">
         Crea uno schema facile da memorizzare.
       </div>
+
     </button>
+
 
     <button
       class="feature"
       onclick="selectTool('Dammi le parole chiave più importanti da ricordare')"
     >
-      <div class="feature-icon">🔑</div>
-      <div class="feature-title">Parole chiave</div>
+
+      <div class="feature-icon">
+        🔑
+      </div>
+
+      <div class="feature-title">
+        Parole chiave
+      </div>
+
       <div class="feature-text">
         Individua ciò che devi assolutamente ricordare.
       </div>
+
     </button>
+
 
     <button
       class="feature"
-      onclick="selectTool('Controlla attentamente queste informazioni e dimmi quali sono certe e quali devono essere verificate')"
+      onclick="selectTool('Controlla queste informazioni e indicami chiaramente cosa è certo e cosa non può essere verificato')"
     >
-      <div class="feature-icon">🌐</div>
-      <div class="feature-title">Verifica</div>
-      <div class="feature-text">
-        Controlla le informazioni senza inventare dati.
+
+      <div class="feature-icon">
+        🌐
       </div>
+
+      <div class="feature-title">
+        Verifica
+      </div>
+
+      <div class="feature-text">
+        Controlla le informazioni senza inventare.
+      </div>
+
     </button>
+
 
     <button
       class="feature"
       onclick="selectTool('Spiegami questo argomento in modo semplice, passo dopo passo')"
     >
-      <div class="feature-icon">💡</div>
-      <div class="feature-title">Spiegazione</div>
+
+      <div class="feature-icon">
+        💡
+      </div>
+
+      <div class="feature-title">
+        Spiegazione
+      </div>
+
       <div class="feature-text">
         Spiegazioni semplici e dettagliate.
       </div>
+
     </button>
+
 
     <button
       class="feature"
-      onclick="selectTool('Fammi delle domande per ripassare questo argomento e poi correggi le mie risposte')"
+      onclick="selectTool('Fammi delle domande per ripassare questo argomento e correggi le mie risposte')"
     >
-      <div class="feature-icon">🎯</div>
-      <div class="feature-title">Ripasso</div>
+
+      <div class="feature-icon">
+        🎯
+      </div>
+
+      <div class="feature-title">
+        Ripasso
+      </div>
+
       <div class="feature-text">
         Allenati con domande e quiz.
       </div>
+
     </button>
 
   </div>
 
-  <div class="section-title">📖 Materia</div>
+
+  <!-- MATERIE -->
+
+  <div class="section-title">
+    📖 Materia
+  </div>
+
 
   <div class="subjects">
 
-    <div class="subject active">Generale</div>
-    <div class="subject">Matematica</div>
-    <div class="subject">Italiano</div>
-    <div class="subject">Storia</div>
-    <div class="subject">Geografia</div>
-    <div class="subject">Scienze</div>
-    <div class="subject">Inglese</div>
-    <div class="subject">Fisica</div>
-    <div class="subject">Chimica</div>
-
-  </div>
-
-  <div class="message" id="message"></div>
-
-  <div class="loading" id="loading">
-    <div class="dots">
-      <div class="dot"></div>
-      <div class="dot"></div>
-      <div class="dot"></div>
+    <div class="subject active">
+      Generale
     </div>
-    <span>Study AI sta pensando...</span>
+
+    <div class="subject">
+      Matematica
+    </div>
+
+    <div class="subject">
+      Italiano
+    </div>
+
+    <div class="subject">
+      Storia
+    </div>
+
+    <div class="subject">
+      Geografia
+    </div>
+
+    <div class="subject">
+      Scienze
+    </div>
+
+    <div class="subject">
+      Inglese
+    </div>
+
+    <div class="subject">
+      Fisica
+    </div>
+
+    <div class="subject">
+      Chimica
+    </div>
+
   </div>
+
+
+  <!-- LOADING -->
+
+  <div
+    class="loading"
+    id="loading"
+  >
+
+    <div class="dots">
+
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+
+    </div>
+
+    <span>
+      Study AI sta pensando...
+    </span>
+
+  </div>
+
 
   <footer>
     Study AI • Assistente intelligente per lo studio
@@ -533,93 +964,835 @@
 
 </div>
 
+
 <script>
 
-  // ============================================================
-  // COLLEGAMENTO AL TUO CLOUDFLARE WORKER
-  // ============================================================
 
-  const API_URL =
-    "https://study-ai.f4b10giannoni.workers.dev";
+/* ============================================================
+   CONFIGURAZIONE
+   ============================================================ */
 
-
-  // ============================================================
-  // ELEMENTI DELLA PAGINA
-  // ============================================================
-
-  const question =
-    document.getElementById("question");
-
-  const fileInput =
-    document.getElementById("fileInput");
-
-  const preview =
-    document.getElementById("preview");
-
-  const previewImage =
-    document.getElementById("previewImage");
-
-  const message =
-    document.getElementById("message");
-
-  const status =
-    document.getElementById("status");
-
-  const sendBtn =
-    document.getElementById("sendBtn");
-
-  const loading =
-    document.getElementById("loading");
+const API_URL =
+  "https://study-ai.f4b10giannoni.workers.dev";
 
 
-  let selectedImageBase64 = null;
-  let selectedMimeType = null;
-  let selectedSubject = "Generale";
+/* ============================================================
+   ELEMENTI
+   ============================================================ */
+
+const question =
+  document.getElementById("question");
+
+const fileInput =
+  document.getElementById("fileInput");
+
+const preview =
+  document.getElementById("preview");
+
+const previewImage =
+  document.getElementById("previewImage");
+
+const status =
+  document.getElementById("status");
+
+const sendBtn =
+  document.getElementById("sendBtn");
+
+const loading =
+  document.getElementById("loading");
+
+const chatHistory =
+  document.getElementById("chatHistory");
+
+const historyPanel =
+  document.getElementById("historyPanel");
+
+const historyList =
+  document.getElementById("historyList");
+
+const overlay =
+  document.getElementById("overlay");
 
 
-  // ============================================================
-  // SELEZIONE IMMAGINE
-  // ============================================================
+/* ============================================================
+   STATO
+   ============================================================ */
 
-  fileInput.addEventListener("change", async function() {
+let currentChatId = null;
 
-    const file = this.files[0];
+let currentChat = null;
+
+let selectedImageBase64 = null;
+
+let selectedMimeType = null;
+
+let selectedSubject = "Generale";
+
+
+/* ============================================================
+   DATABASE LOCALE
+   ============================================================ */
+
+const DB_NAME =
+  "StudyAI_Database";
+
+const DB_VERSION = 1;
+
+const STORE_NAME =
+  "chats";
+
+
+function openDatabase() {
+
+  return new Promise(
+    (resolve, reject) => {
+
+      const request =
+        indexedDB.open(
+          DB_NAME,
+          DB_VERSION
+        );
+
+
+      request.onupgradeneeded =
+        function(event) {
+
+          const db =
+            event.target.result;
+
+
+          if (
+            !db.objectStoreNames.contains(
+              STORE_NAME
+            )
+          ) {
+
+            const store =
+              db.createObjectStore(
+                STORE_NAME,
+                {
+                  keyPath: "id"
+                }
+              );
+
+
+            store.createIndex(
+              "updatedAt",
+              "updatedAt"
+            );
+
+          }
+
+        };
+
+
+      request.onsuccess =
+        function() {
+
+          resolve(
+            request.result
+          );
+
+        };
+
+
+      request.onerror =
+        function() {
+
+          reject(
+            request.error
+          );
+
+        };
+
+    }
+  );
+
+}
+
+
+async function saveChat() {
+
+  if (!currentChat) {
+    return;
+  }
+
+
+  currentChat.updatedAt =
+    Date.now();
+
+
+  const db =
+    await openDatabase();
+
+
+  return new Promise(
+    (resolve, reject) => {
+
+      const transaction =
+        db.transaction(
+          STORE_NAME,
+          "readwrite"
+        );
+
+
+      transaction.objectStore(
+        STORE_NAME
+      ).put(
+        currentChat
+      );
+
+
+      transaction.oncomplete =
+        function() {
+
+          db.close();
+
+          resolve();
+
+        };
+
+
+      transaction.onerror =
+        function() {
+
+          db.close();
+
+          reject(
+            transaction.error
+          );
+
+        };
+
+    }
+  );
+
+}
+
+
+async function getAllChats() {
+
+  const db =
+    await openDatabase();
+
+
+  return new Promise(
+    (resolve, reject) => {
+
+      const request =
+        db.transaction(
+          STORE_NAME,
+          "readonly"
+        )
+        .objectStore(
+          STORE_NAME
+        )
+        .getAll();
+
+
+      request.onsuccess =
+        function() {
+
+          db.close();
+
+          const chats =
+            request.result || [];
+
+
+          chats.sort(
+            (a, b) =>
+              b.updatedAt -
+              a.updatedAt
+          );
+
+
+          resolve(
+            chats
+          );
+
+        };
+
+
+      request.onerror =
+        function() {
+
+          db.close();
+
+          reject(
+            request.error
+          );
+
+        };
+
+    }
+  );
+
+}
+
+
+async function deleteChatFromDB(id) {
+
+  const db =
+    await openDatabase();
+
+
+  return new Promise(
+    (resolve, reject) => {
+
+      const transaction =
+        db.transaction(
+          STORE_NAME,
+          "readwrite"
+        );
+
+
+      transaction
+        .objectStore(
+          STORE_NAME
+        )
+        .delete(id);
+
+
+      transaction.oncomplete =
+        function() {
+
+          db.close();
+
+          resolve();
+
+        };
+
+
+      transaction.onerror =
+        function() {
+
+          db.close();
+
+          reject(
+            transaction.error
+          );
+
+        };
+
+    }
+  );
+
+}
+
+
+/* ============================================================
+   NUOVA CHAT
+   ============================================================ */
+
+async function newChat() {
+
+  currentChatId =
+    crypto.randomUUID();
+
+
+  currentChat = {
+
+    id:
+      currentChatId,
+
+    title:
+      "Nuova chat",
+
+    subject:
+      "Generale",
+
+    createdAt:
+      Date.now(),
+
+    updatedAt:
+      Date.now(),
+
+    messages:
+      []
+
+  };
+
+
+  selectedSubject =
+    "Generale";
+
+
+  chatHistory.innerHTML =
+    "";
+
+
+  question.value =
+    "";
+
+
+  removeImage();
+
+
+  closeHistory();
+
+
+  await saveChat();
+
+
+  renderHistory();
+
+}
+
+
+/* ============================================================
+   CARICAMENTO CHAT INIZIALE
+   ============================================================ */
+
+async function initializeApp() {
+
+  try {
+
+    const chats =
+      await getAllChats();
+
+
+    if (!chats.length) {
+
+      await newChat();
+
+      return;
+
+    }
+
+
+    await loadChat(
+      chats[0].id
+    );
+
+  } catch (error) {
+
+    console.error(
+      error
+    );
+
+    await newChat();
+
+  }
+
+}
+
+
+/* ============================================================
+   APRI CHAT
+   ============================================================ */
+
+async function loadChat(id) {
+
+  const chats =
+    await getAllChats();
+
+
+  const found =
+    chats.find(
+      chat =>
+        chat.id === id
+    );
+
+
+  if (!found) {
+    return;
+  }
+
+
+  currentChat =
+    found;
+
+  currentChatId =
+    found.id;
+
+
+  selectedSubject =
+    found.subject ||
+    "Generale";
+
+
+  chatHistory.innerHTML =
+    "";
+
+
+  /*
+   * Aggiorniamo la materia selezionata
+   */
+
+  document
+    .querySelectorAll(".subject")
+    .forEach(
+      subject => {
+
+        subject.classList.toggle(
+          "active",
+          subject.textContent.trim() ===
+            selectedSubject
+        );
+
+      }
+    );
+
+
+  /*
+   * Ricostruiamo tutta la chat
+   */
+
+  for (
+    const message of
+    currentChat.messages
+  ) {
+
+    if (
+      message.role ===
+      "user"
+    ) {
+
+      addUserMessage(
+        message.text,
+        message.image || null,
+        false
+      );
+
+    } else {
+
+      addAIMessage(
+        message.text,
+        false
+      );
+
+    }
+
+  }
+
+
+  closeHistory();
+
+
+  scrollToBottom();
+
+  renderHistory();
+
+}
+
+
+/* ============================================================
+   CREA TITOLO CHAT
+   ============================================================ */
+
+function updateChatTitle(text) {
+
+  if (
+    !currentChat ||
+    currentChat.title !==
+      "Nuova chat"
+  ) {
+    return;
+  }
+
+
+  if (!text) {
+    return;
+  }
+
+
+  let title =
+    text.trim();
+
+
+  if (
+    title.length >
+    45
+  ) {
+
+    title =
+      title.substring(
+        0,
+        45
+      ) +
+      "...";
+
+  }
+
+
+  currentChat.title =
+    title;
+
+}
+
+
+/* ============================================================
+   CRONOLOGIA
+   ============================================================ */
+
+async function renderHistory() {
+
+  const chats =
+    await getAllChats();
+
+
+  historyList.innerHTML =
+    "";
+
+
+  if (!chats.length) {
+
+    historyList.innerHTML =
+      "<div style='color:#727b92;font-size:13px;padding:10px;'>Nessuna chat salvata.</div>";
+
+    return;
+
+  }
+
+
+  chats.forEach(
+    chat => {
+
+      const item =
+        document.createElement(
+          "div"
+        );
+
+
+      item.className =
+        "history-item" +
+        (
+          chat.id ===
+          currentChatId
+            ? " active"
+            : ""
+        );
+
+
+      const title =
+        document.createElement(
+          "div"
+        );
+
+      title.className =
+        "history-title";
+
+      title.textContent =
+        chat.title ||
+        "Nuova chat";
+
+
+      const date =
+        document.createElement(
+          "div"
+        );
+
+      date.className =
+        "history-date";
+
+      date.textContent =
+        formatDate(
+          chat.updatedAt
+        );
+
+
+      const deleteButton =
+        document.createElement(
+          "button"
+        );
+
+      deleteButton.className =
+        "delete-chat";
+
+      deleteButton.textContent =
+        "🗑️";
+
+
+      deleteButton.onclick =
+        async function(event) {
+
+          event.stopPropagation();
+
+
+          const confirmed =
+            confirm(
+              "Vuoi eliminare questa chat?"
+            );
+
+
+          if (!confirmed) {
+            return;
+          }
+
+
+          await deleteChatFromDB(
+            chat.id
+          );
+
+
+          if (
+            chat.id ===
+            currentChatId
+          ) {
+
+            await newChat();
+
+          }
+
+
+          renderHistory();
+
+        };
+
+
+      item.appendChild(
+        deleteButton
+      );
+
+      item.appendChild(
+        title
+      );
+
+      item.appendChild(
+        date
+      );
+
+
+      item.onclick =
+        function() {
+
+          loadChat(
+            chat.id
+          );
+
+        };
+
+
+      historyList.appendChild(
+        item
+      );
+
+    }
+  );
+
+}
+
+
+function formatDate(timestamp) {
+
+  const date =
+    new Date(timestamp);
+
+
+  return date.toLocaleDateString(
+    "it-IT",
+    {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric"
+    }
+  ) +
+  " • " +
+  date.toLocaleTimeString(
+    "it-IT",
+    {
+      hour: "2-digit",
+      minute: "2-digit"
+    }
+  );
+
+}
+
+
+/* ============================================================
+   MENU
+   ============================================================ */
+
+function openHistory() {
+
+  historyPanel.classList.add(
+    "open"
+  );
+
+  overlay.classList.add(
+    "show"
+  );
+
+  renderHistory();
+
+}
+
+
+function closeHistory() {
+
+  historyPanel.classList.remove(
+    "open"
+  );
+
+  overlay.classList.remove(
+    "show"
+  );
+
+}
+
+
+/* ============================================================
+   FOTO
+   ============================================================ */
+
+fileInput.addEventListener(
+  "change",
+  async function() {
+
+    const file =
+      this.files[0];
+
 
     if (!file) {
       return;
     }
 
+
     try {
 
-      status.textContent = "● Elaborazione foto";
+      status.textContent =
+        "● Elaborazione foto";
+
 
       const compressed =
-        await compressImage(file);
+        await compressImage(
+          file
+        );
+
 
       selectedImageBase64 =
         compressed.base64;
 
+
       selectedMimeType =
         compressed.mimeType;
+
 
       previewImage.src =
         compressed.dataUrl;
 
+
       preview.style.display =
         "block";
 
-      question.value =
-        "Analizza attentamente questa foto e aiutami a svolgere correttamente il compito. Spiega tutti i passaggi.";
+
+      if (
+        !question.value.trim()
+      ) {
+
+        question.value =
+          "Analizza attentamente questa foto e aiutami a svolgere correttamente il compito. Spiega tutti i passaggi.";
+
+      }
+
 
       status.textContent =
         "● Foto pronta";
 
     } catch (error) {
 
-      console.error(error);
-
-      showMessage(
-        "❌ Non riesco a preparare questa immagine. Prova con un'altra foto."
+      console.error(
+        error
       );
 
       status.textContent =
@@ -627,440 +1800,828 @@
 
     }
 
-  });
+  }
+);
 
 
-  // ============================================================
-  // COMPRESSIONE IMMAGINE
-  // ============================================================
+/* ============================================================
+   COMPRESSIONE FOTO
+   ============================================================ */
 
-  function compressImage(file) {
+function compressImage(file) {
 
-    return new Promise((resolve, reject) => {
+  return new Promise(
+    (resolve, reject) => {
 
       const reader =
         new FileReader();
 
-      reader.onload = function(event) {
 
-        const img =
-          new Image();
+      reader.onload =
+        function(event) {
 
-        img.onload = function() {
+          const img =
+            new Image();
 
-          const MAX_SIZE = 1600;
 
-          let width =
-            img.width;
+          img.onload =
+            function() {
 
-          let height =
-            img.height;
+              const MAX_SIZE =
+                1600;
 
-          if (width > MAX_SIZE || height > MAX_SIZE) {
 
-            if (width > height) {
+              let width =
+                img.width;
 
-              height =
-                Math.round(
-                  height * MAX_SIZE / width
+              let height =
+                img.height;
+
+
+              if (
+                width > MAX_SIZE ||
+                height > MAX_SIZE
+              ) {
+
+                if (
+                  width >
+                  height
+                ) {
+
+                  height =
+                    Math.round(
+                      height *
+                      MAX_SIZE /
+                      width
+                    );
+
+                  width =
+                    MAX_SIZE;
+
+                } else {
+
+                  width =
+                    Math.round(
+                      width *
+                      MAX_SIZE /
+                      height
+                    );
+
+                  height =
+                    MAX_SIZE;
+
+                }
+
+              }
+
+
+              const canvas =
+                document.createElement(
+                  "canvas"
                 );
 
-              width =
-                MAX_SIZE;
 
-            } else {
+              canvas.width =
+                width;
 
-              width =
-                Math.round(
-                  width * MAX_SIZE / height
+              canvas.height =
+                height;
+
+
+              const ctx =
+                canvas.getContext(
+                  "2d"
                 );
 
-              height =
-                MAX_SIZE;
 
-            }
+              ctx.drawImage(
+                img,
+                0,
+                0,
+                width,
+                height
+              );
 
-          }
 
-          const canvas =
-            document.createElement("canvas");
+              const dataUrl =
+                canvas.toDataURL(
+                  "image/jpeg",
+                  0.78
+                );
 
-          canvas.width =
-            width;
 
-          canvas.height =
-            height;
+              resolve({
 
-          const ctx =
-            canvas.getContext("2d");
+                base64:
+                  dataUrl.split(
+                    ","
+                  )[1],
 
-          ctx.drawImage(
-            img,
-            0,
-            0,
-            width,
-            height
-          );
+                mimeType:
+                  "image/jpeg",
 
-          const dataUrl =
-            canvas.toDataURL(
-              "image/jpeg",
-              0.82
-            );
+                dataUrl:
+                  dataUrl
 
-          const base64 =
-            dataUrl.split(",")[1];
+              });
 
-          resolve({
-            base64: base64,
-            mimeType: "image/jpeg",
-            dataUrl: dataUrl
-          });
+            };
+
+
+          img.onerror =
+            reject;
+
+
+          img.src =
+            event.target.result;
 
         };
 
-        img.onerror =
-          reject;
-
-        img.src =
-          event.target.result;
-
-      };
 
       reader.onerror =
         reject;
 
-      reader.readAsDataURL(file);
 
-    });
-
-  }
-
-
-  // ============================================================
-  // RIMUOVI FOTO
-  // ============================================================
-
-  function removeImage() {
-
-    selectedImageBase64 = null;
-
-    selectedMimeType = null;
-
-    fileInput.value = "";
-
-    previewImage.src = "";
-
-    preview.style.display =
-      "none";
-
-    status.textContent =
-      "● Pronto";
-
-  }
-
-
-  // ============================================================
-  // STRUMENTI
-  // ============================================================
-
-  function selectTool(text) {
-
-    question.value =
-      text;
-
-    question.focus();
-
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth"
-    });
-
-  }
-
-
-  // ============================================================
-  // INVIO DOMANDA
-  // ============================================================
-
-  async function sendQuestion() {
-
-    const text =
-      question.value.trim();
-
-    if (!text && !selectedImageBase64) {
-
-      showMessage(
-        "✏️ Scrivi una domanda oppure carica una foto del compito."
+      reader.readAsDataURL(
+        file
       );
 
-      return;
-
     }
+  );
 
-    sendBtn.disabled =
-      true;
-
-    loading.style.display =
-      "flex";
-
-    message.style.display =
-      "none";
-
-    status.textContent =
-      "● Sto pensando...";
+}
 
 
-    try {
+/* ============================================================
+   RIMUOVI FOTO
+   ============================================================ */
 
-      const response =
-        await fetch(
-          API_URL,
-          {
-            method: "POST",
+function removeImage() {
 
-            headers: {
-              "Content-Type": "application/json"
-            },
+  selectedImageBase64 =
+    null;
 
-            body: JSON.stringify({
+  selectedMimeType =
+    null;
 
-              question:
-                text,
+
+  fileInput.value =
+    "";
+
+
+  previewImage.src =
+    "";
+
+
+  preview.style.display =
+    "none";
+
+}
+
+
+/* ============================================================
+   STRUMENTI
+   ============================================================ */
+
+function selectTool(text) {
+
+  question.value =
+    text;
+
+
+  question.focus();
+
+
+  window.scrollTo({
+
+    top: 0,
+
+    behavior:
+      "smooth"
+
+  });
+
+}
+
+
+/* ============================================================
+   INVIO DOMANDA
+   ============================================================ */
+
+async function sendQuestion() {
+
+  const text =
+    question.value.trim();
+
+
+  /*
+   * Domanda testuale senza foto:
+   * FUNZIONA NORMALMENTE.
+   */
+
+  if (
+    !text &&
+    !selectedImageBase64
+  ) {
+
+    return;
+
+  }
+
+
+  /*
+   * Se per qualche motivo non esiste una chat,
+   * ne creiamo una.
+   */
+
+  if (!currentChat) {
+
+    await newChat();
+
+  }
+
+
+  sendBtn.disabled =
+    true;
+
+
+  loading.style.display =
+    "flex";
+
+
+  status.textContent =
+    "● Sto pensando...";
+
+
+  /*
+   * Mostra immediatamente il messaggio
+   * nella chat.
+   */
+
+  addUserMessage(
+    text,
+    selectedImageBase64
+      ? previewImage.src
+      : null
+  );
+
+
+  /*
+   * Salva il messaggio.
+   */
+
+  const userMessage = {
+
+    role:
+      "user",
+
+    text:
+      text,
+
+    image:
+      selectedImageBase64,
+
+    mimeType:
+      selectedMimeType
+
+  };
+
+
+  currentChat.messages.push(
+    userMessage
+  );
+
+
+  updateChatTitle(
+    text ||
+    "Chat con immagine"
+  );
+
+
+  currentChat.subject =
+    selectedSubject;
+
+
+  /*
+   * Salvataggio immediato.
+   */
+
+  await saveChat();
+
+
+  try {
+
+    /*
+     * Mandiamo TUTTA la conversazione
+     * al Worker.
+     */
+
+    const response =
+      await fetch(
+        API_URL,
+        {
+
+          method:
+            "POST",
+
+          headers: {
+
+            "Content-Type":
+              "application/json"
+
+          },
+
+          body:
+            JSON.stringify({
 
               subject:
                 selectedSubject,
 
-              image:
-                selectedImageBase64,
-
-              mimeType:
-                selectedMimeType
+              messages:
+                currentChat.messages
 
             })
 
-          }
-        );
-
-
-      const data =
-        await response.json();
-
-
-      if (!response.ok || !data.ok) {
-
-        throw new Error(
-          data.error ||
-          "Errore nella risposta del server."
-        );
-
-      }
-
-
-      showMessage(
-        formatAnswer(data.answer)
+        }
       );
 
 
-      status.textContent =
-        "● Online";
+    const data =
+      await response.json();
 
 
-    } catch (error) {
+    if (
+      !response.ok ||
+      !data.ok
+    ) {
 
-      console.error(
-        "Study AI error:",
-        error
+      throw new Error(
+        data.error ||
+        "Errore del server."
       );
-
-      showMessage(
-        "❌ <strong>Non riesco a collegarmi all'intelligenza artificiale.</strong><br><br>" +
-        escapeHtml(
-          error.message ||
-          "Controlla la connessione e riprova."
-        )
-      );
-
-      status.textContent =
-        "● Errore";
-
-    } finally {
-
-      sendBtn.disabled =
-        false;
-
-      loading.style.display =
-        "none";
 
     }
 
-  }
+
+    /*
+     * Salva risposta AI.
+     */
+
+    currentChat.messages.push({
+
+      role:
+        "assistant",
+
+      text:
+        data.answer
+
+    });
 
 
-  // ============================================================
-  // FORMATTAZIONE RISPOSTA
-  // ============================================================
-
-  function formatAnswer(text) {
-
-    if (!text) {
-      return "Nessuna risposta ricevuta.";
-    }
-
-    let html =
-      escapeHtml(text);
+    await saveChat();
 
 
-    // Titoli ### Titolo
-    html =
-      html.replace(
-        /^### (.*)$/gm,
-        "<h3>$1</h3>"
-      );
+    addAIMessage(
+      data.answer
+    );
 
 
-    // Titoli ## Titolo
-    html =
-      html.replace(
-        /^## (.*)$/gm,
-        "<h2>$1</h2>"
-      );
+    status.textContent =
+      "● Online";
 
 
-    // Grassetto
-    html =
-      html.replace(
-        /\*\*(.*?)\*\*/g,
-        "<strong>$1</strong>"
-      );
+    renderHistory();
 
 
-    // Codice
-    html =
-      html.replace(
-        /`([^`]+)`/g,
-        "<code>$1</code>"
-      );
+  } catch (error) {
+
+    console.error(
+      error
+    );
 
 
-    // Liste con -
-    html =
-      html.replace(
-        /(?:^|\n)- (.*)(?=\n|$)/g,
-        "<li>$1</li>"
-      );
+    const errorText =
+      "❌ Errore: " +
+      error.message;
 
 
-    html =
-      html.replace(
-        /(<li>.*<\/li>)/gs,
-        "<ul>$1</ul>"
-      );
+    addAIMessage(
+      errorText
+    );
 
 
-    // Nuove righe
-    html =
-      html.replace(
-        /\n/g,
-        "<br>"
-      );
+    status.textContent =
+      "● Errore";
+
+  } finally {
+
+    question.value =
+      "";
+
+    removeImage();
 
 
-    return html;
+    sendBtn.disabled =
+      false;
+
+
+    loading.style.display =
+      "none";
 
   }
 
+}
 
-  // ============================================================
-  // SICUREZZA HTML
-  // ============================================================
 
-  function escapeHtml(text) {
+/* ============================================================
+   MESSAGGIO UTENTE
+   ============================================================ */
 
-    return String(text)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
+function addUserMessage(
+  text,
+  image,
+  shouldScroll = true
+) {
+
+  const div =
+    document.createElement(
+      "div"
+    );
+
+
+  div.className =
+    "chat-message user-message";
+
+
+  if (image) {
+
+    const img =
+      document.createElement(
+        "img"
+      );
+
+
+    img.src =
+      image;
+
+
+    img.className =
+      "message-image";
+
+
+    div.appendChild(
+      img
+    );
 
   }
 
 
-  // ============================================================
-  // MOSTRA MESSAGGIO
-  // ============================================================
+  if (text) {
 
-  function showMessage(text) {
+    const textDiv =
+      document.createElement(
+        "div"
+      );
 
-    message.innerHTML =
+
+    textDiv.textContent =
       text;
 
-    message.style.display =
-      "block";
 
-    setTimeout(() => {
-
-      message.scrollIntoView({
-        behavior: "smooth",
-        block: "center"
-      });
-
-    }, 50);
+    div.appendChild(
+      textDiv
+    );
 
   }
 
 
-  // ============================================================
-  // SELEZIONE MATERIA
-  // ============================================================
+  chatHistory.appendChild(
+    div
+  );
 
-  document
-    .querySelectorAll(".subject")
-    .forEach(subject => {
+
+  if (shouldScroll) {
+    scrollToBottom();
+  }
+
+}
+
+
+/* ============================================================
+   MESSAGGIO AI
+   ============================================================ */
+
+function addAIMessage(
+  text,
+  shouldScroll = true
+) {
+
+  const div =
+    document.createElement(
+      "div"
+    );
+
+
+  div.className =
+    "chat-message ai-message";
+
+
+  div.innerHTML =
+    formatAnswer(
+      text
+    );
+
+
+  chatHistory.appendChild(
+    div
+  );
+
+
+  if (shouldScroll) {
+    scrollToBottom();
+  }
+
+}
+
+
+/* ============================================================
+   FORMATTAZIONE RISPOSTE
+   ============================================================ */
+
+function formatAnswer(text) {
+
+  /*
+   * Prima separiamo i blocchi di codice.
+   * Questo evita che formule e codice vengano
+   * trasformati in HTML in modo sbagliato.
+   */
+
+  const blocks = [];
+
+
+  let safe =
+    String(text);
+
+
+  safe =
+    safe.replace(
+      /```(?:[a-zA-Z0-9_+#.-]+)?\s*([\s\S]*?)```/g,
+      function(match, code) {
+
+        const id =
+          "___CODE_BLOCK_" +
+          blocks.length +
+          "___";
+
+
+        blocks.push(
+          code.trim()
+        );
+
+
+        return id;
+
+      }
+    );
+
+
+  /*
+   * Sicurezza
+   */
+
+  safe =
+    escapeHtml(
+      safe
+    );
+
+
+  /*
+   * Titoli
+   */
+
+  safe =
+    safe.replace(
+      /^### (.*)$/gm,
+      "<h3>$1</h3>"
+    );
+
+
+  safe =
+    safe.replace(
+      /^## (.*)$/gm,
+      "<h2>$1</h2>"
+    );
+
+
+  /*
+   * Grassetto
+   */
+
+  safe =
+    safe.replace(
+      /\*\*(.*?)\*\*/g,
+      "<strong>$1</strong>"
+    );
+
+
+  /*
+   * Liste
+   */
+
+  safe =
+    safe.replace(
+      /(^|\n)- (.*)$/gm,
+      "$1• $2"
+    );
+
+
+  /*
+   * A capo
+   */
+
+  safe =
+    safe.replace(
+      /\n/g,
+      "<br>"
+    );
+
+
+  /*
+   * Ripristina blocchi codice.
+   */
+
+  blocks.forEach(
+    function(code, index) {
+
+      const placeholder =
+        "___CODE_BLOCK_" +
+        index +
+        "___";
+
+
+      const html =
+        "<pre><code>" +
+        escapeHtml(
+          code
+        ) +
+        "</code></pre>";
+
+
+      safe =
+        safe.replace(
+          placeholder,
+          html
+        );
+
+    }
+  );
+
+
+  return safe;
+
+}
+
+
+/* ============================================================
+   SICUREZZA
+   ============================================================ */
+
+function escapeHtml(text) {
+
+  return String(text)
+
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+
+    .replace(
+      /</g,
+      "&lt;"
+    )
+
+    .replace(
+      />/g,
+      "&gt;"
+    )
+
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+/* ============================================================
+   SCROLL
+   ============================================================ */
+
+function scrollToBottom() {
+
+  setTimeout(
+    function() {
+
+      window.scrollTo({
+
+        top:
+          document.body.scrollHeight,
+
+        behavior:
+          "smooth"
+
+      });
+
+    },
+    50
+  );
+
+}
+
+
+/* ============================================================
+   MATERIE
+   ============================================================ */
+
+document
+  .querySelectorAll(".subject")
+  .forEach(
+    subject => {
 
       subject.addEventListener(
         "click",
         function() {
 
           document
-            .querySelectorAll(".subject")
-            .forEach(s =>
-              s.classList.remove("active")
+            .querySelectorAll(
+              ".subject"
+            )
+            .forEach(
+              s =>
+                s.classList.remove(
+                  "active"
+                )
             );
 
-          this.classList.add("active");
+
+          this.classList.add(
+            "active"
+          );
+
 
           selectedSubject =
             this.textContent.trim();
 
+
+          if (currentChat) {
+
+            currentChat.subject =
+              selectedSubject;
+
+            saveChat();
+
+          }
+
         }
       );
 
-    });
-
-
-  // ============================================================
-  // INVIO CON ENTER
-  // ============================================================
-
-  question.addEventListener(
-    "keydown",
-    function(event) {
-
-      if (
-        event.key === "Enter" &&
-        !event.shiftKey
-      ) {
-
-        event.preventDefault();
-
-        sendQuestion();
-
-      }
-
     }
   );
+
+
+/* ============================================================
+   ENTER
+   ============================================================ */
+
+question.addEventListener(
+  "keydown",
+  function(event) {
+
+    if (
+      event.key === "Enter" &&
+      !event.shiftKey
+    ) {
+
+      event.preventDefault();
+
+      sendQuestion();
+
+    }
+
+  }
+);
+
+
+/* ============================================================
+   AVVIO
+   ============================================================ */
+
+initializeApp();
 
 </script>
 
