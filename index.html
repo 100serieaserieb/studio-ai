@@ -1,984 +1,765 @@
 <!DOCTYPE html>
 <html lang="it">
-
 <head>
-
-  <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
-  <title>Study AI</title>
-
-  <style>
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-    }
-
-    body {
-      background: #080b14;
-      color: white;
-      min-height: 100vh;
-    }
-
-    button,
-    textarea {
-      font-family: Arial, sans-serif;
-    }
-
-    .app {
-      max-width: 700px;
-      margin: auto;
-      min-height: 100vh;
-      padding-bottom: 30px;
-    }
-
-    /* HEADER */
-
-    header {
-      padding: 18px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .header-left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .menu-btn {
-      width: 40px;
-      height: 40px;
-      border-radius: 12px;
-      border: 1px solid #30384f;
-      background: #111625;
-      color: white;
-      font-size: 20px;
-      cursor: pointer;
-    }
-
-    .logo {
-      font-size: 24px;
-      font-weight: 800;
-    }
-
-    .logo span {
-      color: #7c5cff;
-    }
-
-    .status {
-      background: #151a2a;
-      border: 1px solid #292f43;
-      padding: 7px 11px;
-      border-radius: 20px;
-      font-size: 12px;
-      color: #aeb7d0;
-      white-space: nowrap;
-    }
-
-    /* HERO */
-
-    .hero {
-      padding: 22px 18px 15px;
-    }
-
-    .hero h1 {
-      font-size: 32px;
-      line-height: 1.1;
-      margin-bottom: 10px;
-    }
-
-    .hero h1 span {
-      color: #8d73ff;
-    }
-
-    .hero p {
-      color: #8f98b0;
-      line-height: 1.5;
-      font-size: 15px;
-    }
-
-    /* CHAT */
-
-    .chat {
-      padding: 0 18px;
-    }
-
-    .chat-history {
-      display: flex;
-      flex-direction: column;
-      gap: 13px;
-      margin-bottom: 15px;
-    }
-
-    .chat-message {
-      max-width: 94%;
-      padding: 14px 16px;
-      border-radius: 18px;
-      line-height: 1.6;
-      font-size: 14px;
-      overflow-wrap: anywhere;
-    }
-
-    .user-message {
-      align-self: flex-end;
-      background: #6d50df;
-      border-bottom-right-radius: 5px;
-    }
-
-    .ai-message {
-      align-self: flex-start;
-      background: #151b2b;
-      border: 1px solid #30384f;
-      border-bottom-left-radius: 5px;
-    }
-
-    .message-image {
-      width: 100%;
-      max-width: 400px;
-      max-height: 320px;
-      object-fit: contain;
-      border-radius: 12px;
-      margin-bottom: 9px;
-      display: block;
-      background: #080b14;
-    }
-
-    /* FORMULE E CODICE */
-
-    .ai-message pre {
-      background: #080b14;
-      border: 1px solid #343b52;
-      border-radius: 12px;
-      padding: 13px;
-      margin: 10px 0;
-      overflow-x: auto;
-      white-space: pre-wrap;
-      word-break: break-word;
-      color: #e8eaf2;
-      font-family: monospace;
-      font-size: 13px;
-    }
-
-    .ai-message pre code {
-      font-family: monospace;
-    }
-
-    .ai-message code {
-      font-family: monospace;
-      background: #080b14;
-      border-radius: 5px;
-      padding: 2px 5px;
-    }
-
-    .ai-message h2 {
-      font-size: 20px;
-      margin: 14px 0 8px;
-    }
-
-    .ai-message h3 {
-      font-size: 17px;
-      margin: 13px 0 7px;
-      color: #b9aaff;
-    }
-
-    .ai-message strong {
-      color: white;
-    }
-
-    .ai-message ul,
-    .ai-message ol {
-      margin: 8px 0 8px 20px;
-    }
-
-    .ai-message li {
-      margin-bottom: 5px;
-    }
-
-    /* INPUT */
-
-    .chat-box {
-      background: #111625;
-      border: 1px solid #252c41;
-      border-radius: 22px;
-      padding: 15px;
-      box-shadow: 0 10px 35px rgba(0,0,0,.25);
-    }
-
-    textarea {
-      width: 100%;
-      min-height: 90px;
-      resize: none;
-      background: transparent;
-      border: none;
-      outline: none;
-      color: white;
-      font-size: 16px;
-      line-height: 1.5;
-    }
-
-    textarea::placeholder {
-      color: #626b83;
-    }
-
-    .chat-actions {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 12px;
-      gap: 10px;
-    }
-
-    .upload-btn {
-      background: #1b2132;
-      border: 1px solid #30384f;
-      color: #dce1f1;
-      border-radius: 13px;
-      padding: 10px 13px;
-      cursor: pointer;
-      font-size: 14px;
-    }
-
-    .send-btn {
-      border: none;
-      background: #7c5cff;
-      color: white;
-      padding: 11px 18px;
-      border-radius: 13px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .send-btn:disabled {
-      opacity: .55;
-      cursor: wait;
-    }
-
-    #fileInput {
-      display: none;
-    }
-
-    .preview {
-      display: none;
-      margin-top: 12px;
-      border-radius: 14px;
-      overflow: hidden;
-      border: 1px solid #30384f;
-      position: relative;
-    }
-
-    .preview img {
-      width: 100%;
-      max-height: 260px;
-      object-fit: contain;
-      display: block;
-      background: #080b14;
-    }
-
-    .remove-image {
-      position: absolute;
-      right: 8px;
-      top: 8px;
-      width: 34px;
-      height: 34px;
-      border: none;
-      border-radius: 50%;
-      background: rgba(0,0,0,.75);
-      color: white;
-      font-size: 21px;
-      cursor: pointer;
-    }
-
-    /* STRUMENTI */
-
-    .section-title {
-      padding: 20px 18px 10px;
-      font-size: 18px;
-      font-weight: 700;
-    }
-
-    .features {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 11px;
-      padding: 0 18px;
-    }
-
-    .feature {
-      background: #111625;
-      border: 1px solid #252c41;
-      border-radius: 17px;
-      padding: 17px 14px;
-      color: white;
-      text-align: left;
-      cursor: pointer;
-    }
-
-    .feature-icon {
-      font-size: 25px;
-      margin-bottom: 9px;
-    }
-
-    .feature-title {
-      font-weight: 700;
-      font-size: 14px;
-      margin-bottom: 5px;
-    }
-
-    .feature-text {
-      color: #788198;
-      font-size: 12px;
-      line-height: 1.3;
-    }
-
-    /* MATERIE */
-
-    .subjects {
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      padding: 5px 18px 15px;
-      scrollbar-width: none;
-    }
-
-    .subjects::-webkit-scrollbar {
-      display: none;
-    }
-
-    .subject {
-      white-space: nowrap;
-      padding: 9px 13px;
-      border-radius: 20px;
-      background: #111625;
-      border: 1px solid #252c41;
-      color: #aeb7d0;
-      font-size: 13px;
-      cursor: pointer;
-    }
-
-    .subject.active {
-      background: #211a46;
-      border-color: #7659ef;
-      color: white;
-    }
-
-    /* CARICAMENTO */
-
-    .loading {
-      display: none;
-      align-items: center;
-      gap: 8px;
-      color: #aeb7d0;
-      padding: 10px 18px;
-    }
-
-    .dots {
-      display: flex;
-      gap: 4px;
-    }
-
-    .dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: #8d73ff;
-      animation: bounce 1.2s infinite;
-    }
-
-    .dot:nth-child(2) {
-      animation-delay: .15s;
-    }
-
-    .dot:nth-child(3) {
-      animation-delay: .3s;
-    }
-
-    @keyframes bounce {
-
-      0%, 80%, 100% {
-        transform: translateY(0);
-        opacity: .4;
-      }
-
-      40% {
-        transform: translateY(-5px);
-        opacity: 1;
-      }
-
-    }
-
-    /* CRONOLOGIA */
-
-    .history-panel {
-      position: fixed;
-      left: 0;
-      top: 0;
-      width: 310px;
-      max-width: 88vw;
-      height: 100vh;
-      background: #0e1320;
-      border-right: 1px solid #30384f;
-      z-index: 1000;
-      transform: translateX(-100%);
-      transition: .25s;
-      padding: 18px;
-      overflow-y: auto;
-    }
-
-    .history-panel.open {
-      transform: translateX(0);
-    }
-
-    .history-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 15px;
-    }
-
-    .history-header h2 {
-      font-size: 19px;
-    }
-
-    .close-history {
-      border: none;
-      background: #1b2132;
-      color: white;
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
-      font-size: 20px;
-      cursor: pointer;
-    }
-
-    .new-chat-btn {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 12px;
-      background: #7c5cff;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-      margin-bottom: 15px;
-    }
-
-    .history-item {
-      width: 100%;
-      text-align: left;
-      padding: 13px;
-      margin-bottom: 8px;
-      border-radius: 12px;
-      border: 1px solid #252c41;
-      background: #111625;
-      color: #dbe0ef;
-      cursor: pointer;
-    }
-
-    .history-item.active {
-      border-color: #7659ef;
-      background: #1b1830;
-    }
-
-    .history-title {
-      font-weight: bold;
-      font-size: 14px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .history-date {
-      margin-top: 5px;
-      color: #727b92;
-      font-size: 11px;
-    }
-
-    .delete-chat {
-      float: right;
-      border: none;
-      background: transparent;
-      color: #7d8498;
-      cursor: pointer;
-      font-size: 15px;
-    }
-
-    .overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,.55);
-      z-index: 999;
-    }
-
-    .overlay.show {
-      display: block;
-    }
-
-    footer {
-      text-align: center;
-      color: #555e76;
-      font-size: 11px;
-      padding: 30px 15px 10px;
-    }
-
-    @media (max-width: 430px) {
-
-      .features {
-        grid-template-columns: 1fr;
-      }
-
-      .hero h1 {
-        font-size: 29px;
-      }
-
-      .status {
-        display: none;
-      }
-
-    }
-
-  </style>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study AI</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:Arial,sans-serif;
+}
+
+body{
+  background:#080b14;
+  color:white;
+  min-height:100vh;
+}
+
+button,
+textarea{
+  font-family:Arial,sans-serif;
+}
+
+.app{
+  max-width:700px;
+  margin:auto;
+  min-height:100vh;
+  padding-bottom:30px;
+}
+
+header{
+  padding:18px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
+
+.header-left{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.menu-btn{
+  width:40px;
+  height:40px;
+  border-radius:12px;
+  border:1px solid #30384f;
+  background:#111625;
+  color:white;
+  font-size:20px;
+  cursor:pointer;
+}
+
+.logo{
+  font-size:24px;
+  font-weight:800;
+}
+
+.logo span{
+  color:#7c5cff;
+}
+
+.status{
+  background:#151a2a;
+  border:1px solid #292f43;
+  padding:7px 11px;
+  border-radius:20px;
+  font-size:12px;
+  color:#aeb7d0;
+  white-space:nowrap;
+}
+
+.hero{
+  padding:22px 18px 15px;
+}
+
+.hero h1{
+  font-size:32px;
+  line-height:1.1;
+  margin-bottom:10px;
+}
+
+.hero h1 span{
+  color:#8d73ff;
+}
+
+.hero p{
+  color:#8f98b0;
+  line-height:1.5;
+  font-size:15px;
+}
+
+.chat{
+  padding:0 18px;
+}
+
+.chat-history{
+  display:flex;
+  flex-direction:column;
+  gap:13px;
+  margin-bottom:15px;
+}
+
+.chat-message{
+  max-width:94%;
+  padding:14px 16px;
+  border-radius:18px;
+  line-height:1.6;
+  font-size:14px;
+  overflow-wrap:anywhere;
+}
+
+.user-message{
+  align-self:flex-end;
+  background:#6d50df;
+  border-bottom-right-radius:5px;
+}
+
+.ai-message{
+  align-self:flex-start;
+  background:#151b2b;
+  border:1px solid #30384f;
+  border-bottom-left-radius:5px;
+}
+
+.message-image{
+  width:100%;
+  max-width:400px;
+  max-height:320px;
+  object-fit:contain;
+  border-radius:12px;
+  margin-bottom:9px;
+  display:block;
+  background:#080b14;
+}
+
+.ai-message pre{
+  background:#080b14;
+  border:1px solid #343b52;
+  border-radius:12px;
+  padding:13px;
+  margin:10px 0;
+  overflow-x:auto;
+  white-space:pre-wrap;
+  word-break:break-word;
+  color:#e8eaf2;
+  font-family:monospace;
+  font-size:13px;
+}
+
+.ai-message pre code{
+  font-family:monospace;
+}
+
+.ai-message code{
+  font-family:monospace;
+  background:#080b14;
+  border-radius:5px;
+  padding:2px 5px;
+}
+
+.ai-message h2{
+  font-size:20px;
+  margin:14px 0 8px;
+}
+
+.ai-message h3{
+  font-size:17px;
+  margin:13px 0 7px;
+  color:#b9aaff;
+}
+
+.ai-message strong{
+  color:white;
+}
+
+.ai-message ul,
+.ai-message ol{
+  margin:8px 0 8px 20px;
+}
+
+.ai-message li{
+  margin-bottom:5px;
+}
+
+.chat-box{
+  background:#111625;
+  border:1px solid #252c41;
+  border-radius:22px;
+  padding:15px;
+  box-shadow:0 10px 35px rgba(0,0,0,.25);
+}
+
+textarea{
+  width:100%;
+  min-height:90px;
+  resize:none;
+  background:transparent;
+  border:none;
+  outline:none;
+  color:white;
+  font-size:16px;
+  line-height:1.5;
+}
+
+textarea::placeholder{
+  color:#626b83;
+}
+
+.chat-actions{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-top:12px;
+  gap:10px;
+}
+
+.upload-btn{
+  background:#1b2132;
+  border:1px solid #30384f;
+  color:#dce1f1;
+  border-radius:13px;
+  padding:10px 13px;
+  cursor:pointer;
+  font-size:14px;
+}
+
+.send-btn{
+  border:none;
+  background:#7c5cff;
+  color:white;
+  padding:11px 18px;
+  border-radius:13px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.send-btn:disabled{
+  opacity:.55;
+  cursor:wait;
+}
+
+#fileInput{
+  display:none;
+}
+
+.preview{
+  display:none;
+  margin-top:12px;
+  border-radius:14px;
+  overflow:hidden;
+  border:1px solid #30384f;
+  position:relative;
+}
+
+.preview img{
+  width:100%;
+  max-height:260px;
+  object-fit:contain;
+  display:block;
+  background:#080b14;
+}
+
+.remove-image{
+  position:absolute;
+  right:8px;
+  top:8px;
+  width:34px;
+  height:34px;
+  border:none;
+  border-radius:50%;
+  background:rgba(0,0,0,.75);
+  color:white;
+  font-size:21px;
+  cursor:pointer;
+}
+
+.section-title{
+  padding:20px 18px 10px;
+  font-size:18px;
+  font-weight:700;
+}
+
+.features{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:11px;
+  padding:0 18px;
+}
+
+.feature{
+  background:#111625;
+  border:1px solid #252c41;
+  border-radius:17px;
+  padding:17px 14px;
+  color:white;
+  text-align:left;
+  cursor:pointer;
+}
+
+.feature-icon{
+  font-size:25px;
+  margin-bottom:9px;
+}
+
+.feature-title{
+  font-weight:700;
+  font-size:14px;
+  margin-bottom:5px;
+}
+
+.feature-text{
+  color:#788198;
+  font-size:12px;
+  line-height:1.3;
+}
+
+.subjects{
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding:5px 18px 15px;
+  scrollbar-width:none;
+}
+
+.subjects::-webkit-scrollbar{
+  display:none;
+}
+
+.subject{
+  white-space:nowrap;
+  padding:9px 13px;
+  border-radius:20px;
+  background:#111625;
+  border:1px solid #252c41;
+  color:#aeb7d0;
+  font-size:13px;
+  cursor:pointer;
+}
+
+.subject.active{
+  background:#211a46;
+  border-color:#7659ef;
+  color:white;
+}
+
+.loading{
+  display:none;
+  align-items:center;
+  gap:8px;
+  color:#aeb7d0;
+  padding:10px 18px;
+}
+
+.dots{
+  display:flex;
+  gap:4px;
+}
+
+.dot{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:#8d73ff;
+  animation:bounce 1.2s infinite;
+}
+
+.dot:nth-child(2){
+  animation-delay:.15s;
+}
+
+.dot:nth-child(3){
+  animation-delay:.3s;
+}
+
+@keyframes bounce{
+  0%,80%,100%{
+    transform:translateY(0);
+    opacity:.4;
+  }
+
+  40%{
+    transform:translateY(-5px);
+    opacity:1;
+  }
+}
+
+.history-panel{
+  position:fixed;
+  left:0;
+  top:0;
+  width:310px;
+  max-width:88vw;
+  height:100vh;
+  background:#0e1320;
+  border-right:1px solid #30384f;
+  z-index:1000;
+  transform:translateX(-100%);
+  transition:.25s;
+  padding:18px;
+  overflow-y:auto;
+}
+
+.history-panel.open{
+  transform:translateX(0);
+}
+
+.history-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:15px;
+}
+
+.history-header h2{
+  font-size:19px;
+}
+
+.close-history{
+  border:none;
+  background:#1b2132;
+  color:white;
+  width:36px;
+  height:36px;
+  border-radius:10px;
+  font-size:20px;
+  cursor:pointer;
+}
+
+.new-chat-btn{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:12px;
+  background:#7c5cff;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+  margin-bottom:15px;
+}
+
+.history-item{
+  width:100%;
+  text-align:left;
+  padding:13px;
+  margin-bottom:8px;
+  border-radius:12px;
+  border:1px solid #252c41;
+  background:#111625;
+  color:#dbe0ef;
+  cursor:pointer;
+}
+
+.history-item.active{
+  border-color:#7659ef;
+  background:#1b1830;
+}
+
+.history-title{
+  font-weight:bold;
+  font-size:14px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.history-date{
+  margin-top:5px;
+  color:#727b92;
+  font-size:11px;
+}
+
+.delete-chat{
+  float:right;
+  border:none;
+  background:transparent;
+  color:#7d8498;
+  cursor:pointer;
+  font-size:15px;
+}
+
+.overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.55);
+  z-index:999;
+}
+
+.overlay.show{
+  display:block;
+}
+
+footer{
+  text-align:center;
+  color:#555e76;
+  font-size:11px;
+  padding:30px 15px 10px;
+}
+
+@media(max-width:430px){
+
+  .features{
+    grid-template-columns:1fr;
+  }
+
+  .hero h1{
+    font-size:29px;
+  }
+
+  .status{
+    display:none;
+  }
+}
+</style>
 </head>
-
 
 <body>
 
+<div class="overlay" id="overlay" onclick="closeHistory()"></div>
 
-<!-- CRONOLOGIA -->
-
-<div
-  class="overlay"
-  id="overlay"
-  onclick="closeHistory()"
-></div>
-
-
-<div
-  class="history-panel"
-  id="historyPanel"
->
+<div class="history-panel" id="historyPanel">
 
   <div class="history-header">
-
-    <h2>
-      💬 Le mie chat
-    </h2>
-
-    <button
-      class="close-history"
-      onclick="closeHistory()"
-    >
-      ×
-    </button>
-
+    <h2>💬 Le mie chat</h2>
+    <button class="close-history" onclick="closeHistory()">×</button>
   </div>
 
-
-  <button
-    class="new-chat-btn"
-    onclick="newChat()"
-  >
+  <button class="new-chat-btn" onclick="newChat()">
     ＋ Nuova chat
   </button>
-
 
   <div id="historyList"></div>
 
 </div>
 
-
 <div class="app">
 
+<header>
 
-  <!-- HEADER -->
+  <div class="header-left">
 
-  <header>
+    <button class="menu-btn" onclick="openHistory()">
+      ☰
+    </button>
 
-    <div class="header-left">
+    <div class="logo">
+      🤖 Study<span>AI</span>
+    </div>
+
+  </div>
+
+  <div class="status" id="status">
+    ● Pronto
+  </div>
+
+</header>
+
+<section class="hero">
+
+  <h1>
+    Studia meglio.<br>
+    <span>Impara davvero.</span>
+  </h1>
+
+  <p>
+    Fai domande, invia foto dei compiti e continua
+    la conversazione finché non hai capito tutto.
+  </p>
+
+</section>
+
+<div class="chat">
+
+  <div class="chat-history" id="chatHistory"></div>
+
+  <div class="chat-box">
+
+    <textarea
+      id="question"
+      placeholder="Scrivi qui la tua domanda..."
+    ></textarea>
+
+    <div class="chat-actions">
+
+      <label class="upload-btn">
+        📸 Foto
+        <input
+          type="file"
+          id="fileInput"
+          accept="image/*"
+        >
+      </label>
 
       <button
-        class="menu-btn"
-        onclick="openHistory()"
+        class="send-btn"
+        id="sendBtn"
+        onclick="sendQuestion()"
       >
-        ☰
+        Invia ➜
       </button>
 
-      <div class="logo">
-        🤖 Study<span>AI</span>
-      </div>
-
     </div>
 
+    <div class="preview" id="preview">
 
-    <div
-      class="status"
-      id="status"
-    >
-      ● Pronto
-    </div>
+      <img id="previewImage" alt="Anteprima">
 
-  </header>
-
-
-  <!-- HERO -->
-
-  <section class="hero">
-
-    <h1>
-      Studia meglio.<br>
-      <span>Impara davvero.</span>
-    </h1>
-
-    <p>
-      Fai domande, invia foto dei compiti e continua
-      la conversazione finché non hai capito tutto.
-    </p>
-
-  </section>
-
-
-  <!-- CHAT -->
-
-  <div class="chat">
-
-    <div
-      class="chat-history"
-      id="chatHistory"
-    ></div>
-
-
-    <div class="chat-box">
-
-      <textarea
-        id="question"
-        placeholder="Scrivi qui la tua domanda..."
-      ></textarea>
-
-
-      <div class="chat-actions">
-
-        <label class="upload-btn">
-
-          📸 Foto
-
-          <input
-            type="file"
-            id="fileInput"
-            accept="image/*"
-          >
-
-        </label>
-
-
-        <button
-          class="send-btn"
-          id="sendBtn"
-          onclick="sendQuestion()"
-        >
-          Invia ➜
-        </button>
-
-      </div>
-
-
-      <div
-        class="preview"
-        id="preview"
+      <button
+        class="remove-image"
+        onclick="removeImage()"
       >
-
-        <img
-          id="previewImage"
-          alt="Anteprima"
-        >
-
-        <button
-          class="remove-image"
-          onclick="removeImage()"
-        >
-          ×
-        </button>
-
-      </div>
+        ×
+      </button>
 
     </div>
 
   </div>
-
-
-  <!-- STRUMENTI -->
-
-  <div class="section-title">
-    📚 Cosa vuoi fare?
-  </div>
-
-
-  <div class="features">
-
-
-    <button
-      class="feature"
-      onclick="selectTool('Correggi il mio compito e spiegami tutti gli errori')"
-    >
-
-      <div class="feature-icon">
-        ✏️
-      </div>
-
-      <div class="feature-title">
-        Correggi compito
-      </div>
-
-      <div class="feature-text">
-        Trova gli errori e spiegami come correggerli.
-      </div>
-
-    </button>
-
-
-    <button
-      class="feature"
-      onclick="selectTool('Fammi un riassunto chiaro e completo del testo')"
-    >
-
-      <div class="feature-icon">
-        📚
-      </div>
-
-      <div class="feature-title">
-        Riassunto
-      </div>
-
-      <div class="feature-text">
-        Trasforma un testo lungo in un riassunto.
-      </div>
-
-    </button>
-
-
-    <button
-      class="feature"
-      onclick="selectTool('Crea una mappa concettuale ordinata e facile da studiare')"
-    >
-
-      <div class="feature-icon">
-        🧠
-      </div>
-
-      <div class="feature-title">
-        Mappa concettuale
-      </div>
-
-      <div class="feature-text">
-        Organizza gli argomenti in modo semplice.
-      </div>
-
-    </button>
-
-
-    <button
-      class="feature"
-      onclick="selectTool('Crea uno schema ordinato per studiare questo argomento')"
-    >
-
-      <div class="feature-icon">
-        📝
-      </div>
-
-      <div class="feature-title">
-        Schema
-      </div>
-
-      <div class="feature-text">
-        Crea uno schema facile da memorizzare.
-      </div>
-
-    </button>
-
-
-    <button
-      class="feature"
-      onclick="selectTool('Dammi le parole chiave più importanti da ricordare')"
-    >
-
-      <div class="feature-icon">
-        🔑
-      </div>
-
-      <div class="feature-title">
-        Parole chiave
-      </div>
-
-      <div class="feature-text">
-        Individua ciò che devi assolutamente ricordare.
-      </div>
-
-    </button>
-
-
-    <button
-      class="feature"
-      onclick="selectTool('Controlla queste informazioni e indicami chiaramente cosa è certo e cosa non può essere verificato')"
-    >
-
-      <div class="feature-icon">
-        🌐
-      </div>
-
-      <div class="feature-title">
-        Verifica
-      </div>
-
-      <div class="feature-text">
-        Controlla le informazioni senza inventare.
-      </div>
-
-    </button>
-
-
-    <button
-      class="feature"
-      onclick="selectTool('Spiegami questo argomento in modo semplice, passo dopo passo')"
-    >
-
-      <div class="feature-icon">
-        💡
-      </div>
-
-      <div class="feature-title">
-        Spiegazione
-      </div>
-
-      <div class="feature-text">
-        Spiegazioni semplici e dettagliate.
-      </div>
-
-    </button>
-
-
-    <button
-      class="feature"
-      onclick="selectTool('Fammi delle domande per ripassare questo argomento e correggi le mie risposte')"
-    >
-
-      <div class="feature-icon">
-        🎯
-      </div>
-
-      <div class="feature-title">
-        Ripasso
-      </div>
-
-      <div class="feature-text">
-        Allenati con domande e quiz.
-      </div>
-
-    </button>
-
-  </div>
-
-
-  <!-- MATERIE -->
-
-  <div class="section-title">
-    📖 Materia
-  </div>
-
-
-  <div class="subjects">
-
-    <div class="subject active">
-      Generale
-    </div>
-
-    <div class="subject">
-      Matematica
-    </div>
-
-    <div class="subject">
-      Italiano
-    </div>
-
-    <div class="subject">
-      Storia
-    </div>
-
-    <div class="subject">
-      Geografia
-    </div>
-
-    <div class="subject">
-      Scienze
-    </div>
-
-    <div class="subject">
-      Inglese
-    </div>
-
-    <div class="subject">
-      Fisica
-    </div>
-
-    <div class="subject">
-      Chimica
-    </div>
-
-  </div>
-
-
-  <!-- LOADING -->
-
-  <div
-    class="loading"
-    id="loading"
-  >
-
-    <div class="dots">
-
-      <div class="dot"></div>
-      <div class="dot"></div>
-      <div class="dot"></div>
-
-    </div>
-
-    <span>
-      Study AI sta pensando...
-    </span>
-
-  </div>
-
-
-  <footer>
-    Study AI • Assistente intelligente per lo studio
-  </footer>
 
 </div>
 
+<div class="section-title">
+  📚 Cosa vuoi fare?
+</div>
+
+<div class="features">
+
+  <button
+    class="feature"
+    onclick="selectTool('Correggi il mio compito e spiegami tutti gli errori')"
+  >
+    <div class="feature-icon">✏️</div>
+    <div class="feature-title">Correggi compito</div>
+    <div class="feature-text">
+      Trova gli errori e spiegami come correggerli.
+    </div>
+  </button>
+
+  <button
+    class="feature"
+    onclick="selectTool('Fammi un riassunto chiaro e completo del testo')"
+  >
+    <div class="feature-icon">📚</div>
+    <div class="feature-title">Riassunto</div>
+    <div class="feature-text">
+      Trasforma un testo lungo in un riassunto.
+    </div>
+  </button>
+
+  <button
+    class="feature"
+    onclick="selectTool('Crea una mappa concettuale ordinata e facile da studiare')"
+  >
+    <div class="feature-icon">🧠</div>
+    <div class="feature-title">Mappa concettuale</div>
+    <div class="feature-text">
+      Organizza gli argomenti in modo semplice.
+    </div>
+  </button>
+
+  <button
+    class="feature"
+    onclick="selectTool('Crea uno schema ordinato per studiare questo argomento')"
+  >
+    <div class="feature-icon">📝</div>
+    <div class="feature-title">Schema</div>
+    <div class="feature-text">
+      Crea uno schema facile da memorizzare.
+    </div>
+  </button>
+
+  <button
+    class="feature"
+    onclick="selectTool('Dammi le parole chiave più importanti da ricordare')"
+  >
+    <div class="feature-icon">🔑</div>
+    <div class="feature-title">Parole chiave</div>
+    <div class="feature-text">
+      Individua ciò che devi assolutamente ricordare.
+    </div>
+  </button>
+
+  <button
+    class="feature"
+    onclick="selectTool('Controlla queste informazioni e indicami chiaramente cosa è certo e cosa non può essere verificato')"
+  >
+    <div class="feature-icon">🌐</div>
+    <div class="feature-title">Verifica</div>
+    <div class="feature-text">
+      Controlla le informazioni senza inventare.
+    </div>
+  </button>
+
+  <button
+    class="feature"
+    onclick="selectTool('Spiegami questo argomento in modo semplice, passo dopo passo')"
+  >
+    <div class="feature-icon">💡</div>
+    <div class="feature-title">Spiegazione</div>
+    <div class="feature-text">
+      Spiegazioni semplici e dettagliate.
+    </div>
+  </button>
+
+  <button
+    class="feature"
+    onclick="selectTool('Fammi delle domande per ripassare questo argomento e correggi le mie risposte')"
+  >
+    <div class="feature-icon">🎯</div>
+    <div class="feature-title">Ripasso</div>
+    <div class="feature-text">
+      Allenati con domande e quiz.
+    </div>
+  </button>
+
+</div>
+
+<div class="section-title">
+  📖 Materia
+</div>
+
+<div class="subjects">
+
+  <div class="subject active">Generale</div>
+  <div class="subject">Matematica</div>
+  <div class="subject">Italiano</div>
+  <div class="subject">Storia</div>
+  <div class="subject">Geografia</div>
+  <div class="subject">Scienze</div>
+  <div class="subject">Inglese</div>
+  <div class="subject">Fisica</div>
+  <div class="subject">Chimica</div>
+
+</div>
+
+<div class="loading" id="loading">
+
+  <div class="dots">
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+  </div>
+
+  <span>Study AI sta pensando...</span>
+
+</div>
+
+<footer>
+  Study AI • Assistente intelligente per lo studio
+</footer>
+
+</div>
 
 <script>
 
-
-/* ============================================================
-   CONFIGURAZIONE
-   ============================================================ */
-
 const API_URL =
   "https://study-ai.f4b10giannoni.workers.dev";
-
-
-/* ============================================================
-   ELEMENTI
-   ============================================================ */
 
 const question =
   document.getElementById("question");
@@ -1014,344 +795,230 @@ const overlay =
   document.getElementById("overlay");
 
 
-/* ============================================================
-   STATO
-   ============================================================ */
-
 let currentChatId = null;
-
 let currentChat = null;
 
 let selectedImageBase64 = null;
-
 let selectedMimeType = null;
 
 let selectedSubject = "Generale";
 
 
-/* ============================================================
-   DATABASE LOCALE
-   ============================================================ */
+/* DATABASE */
 
-const DB_NAME =
-  "StudyAI_Database";
-
+const DB_NAME = "StudyAI_Database";
 const DB_VERSION = 1;
-
-const STORE_NAME =
-  "chats";
+const STORE_NAME = "chats";
 
 
-function openDatabase() {
+function openDatabase(){
 
-  return new Promise(
-    (resolve, reject) => {
+  return new Promise((resolve,reject)=>{
 
-      const request =
-        indexedDB.open(
-          DB_NAME,
-          DB_VERSION
+    const request =
+      indexedDB.open(DB_NAME,DB_VERSION);
+
+    request.onupgradeneeded = function(event){
+
+      const db = event.target.result;
+
+      if(!db.objectStoreNames.contains(STORE_NAME)){
+
+        const store =
+          db.createObjectStore(
+            STORE_NAME,
+            {keyPath:"id"}
+          );
+
+        store.createIndex(
+          "updatedAt",
+          "updatedAt"
         );
 
+      }
 
-      request.onupgradeneeded =
-        function(event) {
+    };
 
-          const db =
-            event.target.result;
+    request.onsuccess = function(){
 
+      resolve(request.result);
 
-          if (
-            !db.objectStoreNames.contains(
-              STORE_NAME
-            )
-          ) {
+    };
 
-            const store =
-              db.createObjectStore(
-                STORE_NAME,
-                {
-                  keyPath: "id"
-                }
-              );
+    request.onerror = function(){
 
+      reject(request.error);
 
-            store.createIndex(
-              "updatedAt",
-              "updatedAt"
-            );
+    };
 
-          }
-
-        };
-
-
-      request.onsuccess =
-        function() {
-
-          resolve(
-            request.result
-          );
-
-        };
-
-
-      request.onerror =
-        function() {
-
-          reject(
-            request.error
-          );
-
-        };
-
-    }
-  );
+  });
 
 }
 
 
-async function saveChat() {
+async function saveChat(){
 
-  if (!currentChat) {
-    return;
-  }
+  if(!currentChat) return;
 
+  currentChat.updatedAt = Date.now();
 
-  currentChat.updatedAt =
-    Date.now();
+  const db = await openDatabase();
 
+  return new Promise((resolve,reject)=>{
 
-  const db =
-    await openDatabase();
-
-
-  return new Promise(
-    (resolve, reject) => {
-
-      const transaction =
-        db.transaction(
-          STORE_NAME,
-          "readwrite"
-        );
-
-
-      transaction.objectStore(
-        STORE_NAME
-      ).put(
-        currentChat
+    const transaction =
+      db.transaction(
+        STORE_NAME,
+        "readwrite"
       );
 
+    transaction
+      .objectStore(STORE_NAME)
+      .put(currentChat);
 
-      transaction.oncomplete =
-        function() {
+    transaction.oncomplete = function(){
 
-          db.close();
+      db.close();
+      resolve();
 
-          resolve();
+    };
 
-        };
+    transaction.onerror = function(){
 
+      db.close();
+      reject(transaction.error);
 
-      transaction.onerror =
-        function() {
+    };
 
-          db.close();
-
-          reject(
-            transaction.error
-          );
-
-        };
-
-    }
-  );
+  });
 
 }
 
 
-async function getAllChats() {
+async function getAllChats(){
 
-  const db =
-    await openDatabase();
+  const db = await openDatabase();
 
+  return new Promise((resolve,reject)=>{
 
-  return new Promise(
-    (resolve, reject) => {
+    const request =
+      db
+      .transaction(STORE_NAME,"readonly")
+      .objectStore(STORE_NAME)
+      .getAll();
 
-      const request =
-        db.transaction(
-          STORE_NAME,
-          "readonly"
-        )
-        .objectStore(
-          STORE_NAME
-        )
-        .getAll();
+    request.onsuccess = function(){
 
+      db.close();
 
-      request.onsuccess =
-        function() {
+      const chats =
+        request.result || [];
 
-          db.close();
+      chats.sort(
+        (a,b)=>b.updatedAt-a.updatedAt
+      );
 
-          const chats =
-            request.result || [];
+      resolve(chats);
 
+    };
 
-          chats.sort(
-            (a, b) =>
-              b.updatedAt -
-              a.updatedAt
-          );
+    request.onerror = function(){
 
+      db.close();
+      reject(request.error);
 
-          resolve(
-            chats
-          );
+    };
 
-        };
-
-
-      request.onerror =
-        function() {
-
-          db.close();
-
-          reject(
-            request.error
-          );
-
-        };
-
-    }
-  );
+  });
 
 }
 
 
-async function deleteChatFromDB(id) {
+async function deleteChatFromDB(id){
 
-  const db =
-    await openDatabase();
+  const db = await openDatabase();
 
+  return new Promise((resolve,reject)=>{
 
-  return new Promise(
-    (resolve, reject) => {
+    const transaction =
+      db.transaction(
+        STORE_NAME,
+        "readwrite"
+      );
 
-      const transaction =
-        db.transaction(
-          STORE_NAME,
-          "readwrite"
-        );
+    transaction
+      .objectStore(STORE_NAME)
+      .delete(id);
 
+    transaction.oncomplete = function(){
 
-      transaction
-        .objectStore(
-          STORE_NAME
-        )
-        .delete(id);
+      db.close();
+      resolve();
 
+    };
 
-      transaction.oncomplete =
-        function() {
+    transaction.onerror = function(){
 
-          db.close();
+      db.close();
+      reject(transaction.error);
 
-          resolve();
+    };
 
-        };
-
-
-      transaction.onerror =
-        function() {
-
-          db.close();
-
-          reject(
-            transaction.error
-          );
-
-        };
-
-    }
-  );
+  });
 
 }
 
 
-/* ============================================================
-   NUOVA CHAT
-   ============================================================ */
+/* CHAT */
 
-async function newChat() {
+async function newChat(){
 
   currentChatId =
-    crypto.randomUUID();
-
+    (crypto.randomUUID)
+      ? crypto.randomUUID()
+      : Date.now().toString();
 
   currentChat = {
 
-    id:
-      currentChatId,
+    id:currentChatId,
 
-    title:
-      "Nuova chat",
+    title:"Nuova chat",
 
-    subject:
-      "Generale",
+    subject:"Generale",
 
-    createdAt:
-      Date.now(),
+    createdAt:Date.now(),
 
-    updatedAt:
-      Date.now(),
+    updatedAt:Date.now(),
 
-    messages:
-      []
+    messages:[]
 
   };
 
+  selectedSubject = "Generale";
 
-  selectedSubject =
-    "Generale";
+  chatHistory.innerHTML = "";
 
-
-  chatHistory.innerHTML =
-    "";
-
-
-  question.value =
-    "";
-
+  question.value = "";
 
   removeImage();
 
-
   closeHistory();
 
-
   await saveChat();
-
 
   renderHistory();
 
 }
 
 
-/* ============================================================
-   CARICAMENTO CHAT INIZIALE
-   ============================================================ */
+async function initializeApp(){
 
-async function initializeApp() {
-
-  try {
+  try{
 
     const chats =
       await getAllChats();
 
-
-    if (!chats.length) {
+    if(!chats.length){
 
       await newChat();
 
@@ -1359,16 +1026,11 @@ async function initializeApp() {
 
     }
 
+    await loadChat(chats[0].id);
 
-    await loadChat(
-      chats[0].id
-    );
+  }catch(error){
 
-  } catch (error) {
-
-    console.error(
-      error
-    );
+    console.error(error);
 
     await newChat();
 
@@ -1377,76 +1039,40 @@ async function initializeApp() {
 }
 
 
-/* ============================================================
-   APRI CHAT
-   ============================================================ */
-
-async function loadChat(id) {
+async function loadChat(id){
 
   const chats =
     await getAllChats();
 
-
   const found =
-    chats.find(
-      chat =>
-        chat.id === id
-    );
+    chats.find(chat=>chat.id===id);
 
+  if(!found) return;
 
-  if (!found) {
-    return;
-  }
+  currentChat = found;
 
-
-  currentChat =
-    found;
-
-  currentChatId =
-    found.id;
-
+  currentChatId = found.id;
 
   selectedSubject =
-    found.subject ||
-    "Generale";
+    found.subject || "Generale";
 
-
-  chatHistory.innerHTML =
-    "";
-
-
-  /*
-   * Aggiorniamo la materia selezionata
-   */
+  chatHistory.innerHTML = "";
 
   document
     .querySelectorAll(".subject")
-    .forEach(
-      subject => {
+    .forEach(subject=>{
 
-        subject.classList.toggle(
-          "active",
-          subject.textContent.trim() ===
-            selectedSubject
-        );
+      subject.classList.toggle(
+        "active",
+        subject.textContent.trim()
+        === selectedSubject
+      );
 
-      }
-    );
+    });
 
+  for(const message of currentChat.messages){
 
-  /*
-   * Ricostruiamo tutta la chat
-   */
-
-  for (
-    const message of
-    currentChat.messages
-  ) {
-
-    if (
-      message.role ===
-      "user"
-    ) {
+    if(message.role==="user"){
 
       addUserMessage(
         message.text,
@@ -1454,7 +1080,7 @@ async function loadChat(id) {
         false
       );
 
-    } else {
+    }else{
 
       addAIMessage(
         message.text,
@@ -1465,9 +1091,7 @@ async function loadChat(id) {
 
   }
 
-
   closeHistory();
-
 
   scrollToBottom();
 
@@ -1476,66 +1100,39 @@ async function loadChat(id) {
 }
 
 
-/* ============================================================
-   CREA TITOLO CHAT
-   ============================================================ */
+function updateChatTitle(text){
 
-function updateChatTitle(text) {
-
-  if (
+  if(
     !currentChat ||
-    currentChat.title !==
-      "Nuova chat"
-  ) {
-    return;
-  }
+    currentChat.title !== "Nuova chat"
+  ) return;
 
-
-  if (!text) {
-    return;
-  }
-
+  if(!text) return;
 
   let title =
     text.trim();
 
-
-  if (
-    title.length >
-    45
-  ) {
+  if(title.length>45){
 
     title =
-      title.substring(
-        0,
-        45
-      ) +
-      "...";
+      title.substring(0,45)
+      + "...";
 
   }
 
-
-  currentChat.title =
-    title;
+  currentChat.title = title;
 
 }
 
 
-/* ============================================================
-   CRONOLOGIA
-   ============================================================ */
-
-async function renderHistory() {
+async function renderHistory(){
 
   const chats =
     await getAllChats();
 
+  historyList.innerHTML = "";
 
-  historyList.innerHTML =
-    "";
-
-
-  if (!chats.length) {
+  if(!chats.length){
 
     historyList.innerHTML =
       "<div style='color:#727b92;font-size:13px;padding:10px;'>Nessuna chat salvata.</div>";
@@ -1544,259 +1141,187 @@ async function renderHistory() {
 
   }
 
+  chats.forEach(chat=>{
 
-  chats.forEach(
-    chat => {
+    const item =
+      document.createElement("div");
 
-      const item =
-        document.createElement(
-          "div"
-        );
+    item.className =
+      "history-item"
+      +
+      (
+        chat.id===currentChatId
+        ? " active"
+        : ""
+      );
 
+    const title =
+      document.createElement("div");
 
-      item.className =
-        "history-item" +
-        (
-          chat.id ===
-          currentChatId
-            ? " active"
-            : ""
-        );
+    title.className =
+      "history-title";
 
+    title.textContent =
+      chat.title || "Nuova chat";
 
-      const title =
-        document.createElement(
-          "div"
-        );
+    const date =
+      document.createElement("div");
 
-      title.className =
-        "history-title";
+    date.className =
+      "history-date";
 
-      title.textContent =
-        chat.title ||
-        "Nuova chat";
+    date.textContent =
+      formatDate(chat.updatedAt);
 
+    const deleteButton =
+      document.createElement("button");
 
-      const date =
-        document.createElement(
-          "div"
-        );
+    deleteButton.className =
+      "delete-chat";
 
-      date.className =
-        "history-date";
+    deleteButton.textContent =
+      "🗑️";
 
-      date.textContent =
-        formatDate(
-          chat.updatedAt
-        );
+    deleteButton.onclick =
+      async function(event){
 
+        event.stopPropagation();
 
-      const deleteButton =
-        document.createElement(
-          "button"
-        );
-
-      deleteButton.className =
-        "delete-chat";
-
-      deleteButton.textContent =
-        "🗑️";
-
-
-      deleteButton.onclick =
-        async function(event) {
-
-          event.stopPropagation();
-
-
-          const confirmed =
-            confirm(
-              "Vuoi eliminare questa chat?"
-            );
-
-
-          if (!confirmed) {
-            return;
-          }
-
-
-          await deleteChatFromDB(
-            chat.id
+        const confirmed =
+          confirm(
+            "Vuoi eliminare questa chat?"
           );
 
+        if(!confirmed) return;
 
-          if (
-            chat.id ===
-            currentChatId
-          ) {
+        await deleteChatFromDB(chat.id);
 
-            await newChat();
+        if(chat.id===currentChatId){
 
-          }
+          await newChat();
 
+        }
 
-          renderHistory();
+        renderHistory();
 
-        };
+      };
 
+    item.appendChild(deleteButton);
+    item.appendChild(title);
+    item.appendChild(date);
 
-      item.appendChild(
-        deleteButton
-      );
+    item.onclick =
+      function(){
 
-      item.appendChild(
-        title
-      );
+        loadChat(chat.id);
 
-      item.appendChild(
-        date
-      );
+      };
 
+    historyList.appendChild(item);
 
-      item.onclick =
-        function() {
-
-          loadChat(
-            chat.id
-          );
-
-        };
-
-
-      historyList.appendChild(
-        item
-      );
-
-    }
-  );
+  });
 
 }
 
 
-function formatDate(timestamp) {
+function formatDate(timestamp){
 
   const date =
     new Date(timestamp);
 
-
-  return date.toLocaleDateString(
-    "it-IT",
-    {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric"
-    }
-  ) +
-  " • " +
-  date.toLocaleTimeString(
-    "it-IT",
-    {
-      hour: "2-digit",
-      minute: "2-digit"
-    }
+  return (
+    date.toLocaleDateString(
+      "it-IT",
+      {
+        day:"2-digit",
+        month:"2-digit",
+        year:"numeric"
+      }
+    )
+    +
+    " • "
+    +
+    date.toLocaleTimeString(
+      "it-IT",
+      {
+        hour:"2-digit",
+        minute:"2-digit"
+      }
+    )
   );
 
 }
 
 
-/* ============================================================
-   MENU
-   ============================================================ */
+/* MENU */
 
-function openHistory() {
+function openHistory(){
 
-  historyPanel.classList.add(
-    "open"
-  );
+  historyPanel.classList.add("open");
 
-  overlay.classList.add(
-    "show"
-  );
+  overlay.classList.add("show");
 
   renderHistory();
 
 }
 
 
-function closeHistory() {
+function closeHistory(){
 
-  historyPanel.classList.remove(
-    "open"
-  );
+  historyPanel.classList.remove("open");
 
-  overlay.classList.remove(
-    "show"
-  );
+  overlay.classList.remove("show");
 
 }
 
 
-/* ============================================================
-   FOTO
-   ============================================================ */
+/* IMMAGINE */
 
 fileInput.addEventListener(
   "change",
-  async function() {
+  async function(){
 
     const file =
       this.files[0];
 
+    if(!file) return;
 
-    if (!file) {
-      return;
-    }
-
-
-    try {
+    try{
 
       status.textContent =
         "● Elaborazione foto";
 
-
       const compressed =
-        await compressImage(
-          file
-        );
-
+        await compressImage(file);
 
       selectedImageBase64 =
         compressed.base64;
 
-
       selectedMimeType =
         compressed.mimeType;
-
 
       previewImage.src =
         compressed.dataUrl;
 
-
       preview.style.display =
         "block";
 
-
-      if (
-        !question.value.trim()
-      ) {
+      if(!question.value.trim()){
 
         question.value =
           "Analizza attentamente questa foto e aiutami a svolgere correttamente il compito. Spiega tutti i passaggi.";
 
       }
 
-
       status.textContent =
         "● Foto pronta";
 
-    } catch (error) {
+    }catch(error){
 
-      console.error(
-        error
-      );
+      console.error(error);
 
       status.textContent =
-        "● Errore";
+        "● Errore foto";
 
     }
 
@@ -1804,32 +1329,25 @@ fileInput.addEventListener(
 );
 
 
-/* ============================================================
-   COMPRESSIONE FOTO
-   ============================================================ */
-
-function compressImage(file) {
+function compressImage(file){
 
   return new Promise(
-    (resolve, reject) => {
+    (resolve,reject)=>{
 
       const reader =
         new FileReader();
 
-
       reader.onload =
-        function(event) {
+        function(event){
 
           const img =
             new Image();
 
-
           img.onload =
-            function() {
+            function(){
 
               const MAX_SIZE =
                 1600;
-
 
               let width =
                 img.width;
@@ -1837,16 +1355,12 @@ function compressImage(file) {
               let height =
                 img.height;
 
+              if(
+                width>MAX_SIZE ||
+                height>MAX_SIZE
+              ){
 
-              if (
-                width > MAX_SIZE ||
-                height > MAX_SIZE
-              ) {
-
-                if (
-                  width >
-                  height
-                ) {
+                if(width>height){
 
                   height =
                     Math.round(
@@ -1858,7 +1372,7 @@ function compressImage(file) {
                   width =
                     MAX_SIZE;
 
-                } else {
+                }else{
 
                   width =
                     Math.round(
@@ -1874,12 +1388,10 @@ function compressImage(file) {
 
               }
 
-
               const canvas =
                 document.createElement(
                   "canvas"
                 );
-
 
               canvas.width =
                 width;
@@ -1887,12 +1399,8 @@ function compressImage(file) {
               canvas.height =
                 height;
 
-
               const ctx =
-                canvas.getContext(
-                  "2d"
-                );
-
+                canvas.getContext("2d");
 
               ctx.drawImage(
                 img,
@@ -1902,20 +1410,16 @@ function compressImage(file) {
                 height
               );
 
-
               const dataUrl =
                 canvas.toDataURL(
                   "image/jpeg",
                   0.78
                 );
 
-
               resolve({
 
                 base64:
-                  dataUrl.split(
-                    ","
-                  )[1],
+                  dataUrl.split(",")[1],
 
                 mimeType:
                   "image/jpeg",
@@ -1927,24 +1431,18 @@ function compressImage(file) {
 
             };
 
-
           img.onerror =
             reject;
-
 
           img.src =
             event.target.result;
 
         };
 
-
       reader.onerror =
         reject;
 
-
-      reader.readAsDataURL(
-        file
-      );
+      reader.readAsDataURL(file);
 
     }
   );
@@ -1952,137 +1450,90 @@ function compressImage(file) {
 }
 
 
-/* ============================================================
-   RIMUOVI FOTO
-   ============================================================ */
+function removeImage(){
 
-function removeImage() {
+  selectedImageBase64 = null;
 
-  selectedImageBase64 =
-    null;
+  selectedMimeType = null;
 
-  selectedMimeType =
-    null;
+  fileInput.value = "";
 
+  previewImage.src = "";
 
-  fileInput.value =
-    "";
-
-
-  previewImage.src =
-    "";
-
-
-  preview.style.display =
-    "none";
+  preview.style.display = "none";
 
 }
 
 
-/* ============================================================
-   STRUMENTI
-   ============================================================ */
+/* STRUMENTI */
 
-function selectTool(text) {
+function selectTool(text){
 
   question.value =
     text;
 
-
   question.focus();
 
-
   window.scrollTo({
-
-    top: 0,
-
-    behavior:
-      "smooth"
-
+    top:0,
+    behavior:"smooth"
   });
 
 }
 
 
-/* ============================================================
-   INVIO DOMANDA
-   ============================================================ */
+/* INVIO */
 
-async function sendQuestion() {
+async function sendQuestion(){
 
   const text =
     question.value.trim();
 
-
-  /*
-   * Domanda testuale senza foto:
-   * FUNZIONA NORMALMENTE.
-   */
-
-  if (
+  if(
     !text &&
     !selectedImageBase64
-  ) {
+  ){
 
     return;
 
   }
 
-
-  /*
-   * Se per qualche motivo non esiste una chat,
-   * ne creiamo una.
-   */
-
-  if (!currentChat) {
+  if(!currentChat){
 
     await newChat();
 
   }
 
-
-  sendBtn.disabled =
-    true;
-
+  sendBtn.disabled = true;
 
   loading.style.display =
     "flex";
-
 
   status.textContent =
     "● Sto pensando...";
 
 
-  /*
-   * Mostra immediatamente il messaggio
-   * nella chat.
-   */
+  const imageForChat =
+    selectedImageBase64
+      ? previewImage.src
+      : null;
+
 
   addUserMessage(
     text,
-    selectedImageBase64
-      ? previewImage.src
-      : null
+    imageForChat
   );
 
 
-  /*
-   * Salva il messaggio.
-   */
-
   const userMessage = {
 
-    role:
-      "user",
+    role:"user",
 
-    text:
-      text,
+    text:text,
 
-    image:
-      selectedImageBase64,
+    image:selectedImageBase64,
 
-    mimeType:
-      selectedMimeType
+    mimeType:selectedMimeType
 
   };
 
@@ -2093,8 +1544,7 @@ async function sendQuestion() {
 
 
   updateChatTitle(
-    text ||
-    "Chat con immagine"
+    text || "Chat con immagine"
   );
 
 
@@ -2102,58 +1552,56 @@ async function sendQuestion() {
     selectedSubject;
 
 
-  /*
-   * Salvataggio immediato.
-   */
-
   await saveChat();
 
 
-  try {
-
-    /*
-     * Mandiamo TUTTA la conversazione
-     * al Worker.
-     */
+  try{
 
     const response =
       await fetch(
         API_URL,
         {
+          method:"POST",
 
-          method:
-            "POST",
-
-          headers: {
-
+          headers:{
             "Content-Type":
               "application/json"
-
           },
 
-          body:
-            JSON.stringify({
+          body:JSON.stringify({
 
-              subject:
-                selectedSubject,
+            subject:
+              selectedSubject,
 
-              messages:
-                currentChat.messages
+            messages:
+              currentChat.messages
 
-            })
+          })
 
         }
       );
 
 
-    const data =
-      await response.json();
+    let data;
+
+    try{
+
+      data =
+        await response.json();
+
+    }catch(e){
+
+      throw new Error(
+        "Il server non ha restituito una risposta valida."
+      );
+
+    }
 
 
-    if (
+    if(
       !response.ok ||
       !data.ok
-    ) {
+    ){
 
       throw new Error(
         data.error ||
@@ -2163,17 +1611,11 @@ async function sendQuestion() {
     }
 
 
-    /*
-     * Salva risposta AI.
-     */
-
     currentChat.messages.push({
 
-      role:
-        "assistant",
+      role:"assistant",
 
-      text:
-        data.answer
+      text:data.answer
 
     });
 
@@ -2193,15 +1635,13 @@ async function sendQuestion() {
     renderHistory();
 
 
-  } catch (error) {
+  }catch(error){
 
-    console.error(
-      error
-    );
-
+    console.error(error);
 
     const errorText =
-      "❌ Errore: " +
+      "❌ Errore: "
+      +
       error.message;
 
 
@@ -2213,17 +1653,13 @@ async function sendQuestion() {
     status.textContent =
       "● Errore";
 
-  } finally {
+  }finally{
 
-    question.value =
-      "";
+    question.value = "";
 
     removeImage();
 
-
-    sendBtn.disabled =
-      false;
-
+    sendBtn.disabled = false;
 
     loading.style.display =
       "none";
@@ -2233,131 +1669,93 @@ async function sendQuestion() {
 }
 
 
-/* ============================================================
-   MESSAGGIO UTENTE
-   ============================================================ */
+/* MESSAGGI */
 
 function addUserMessage(
   text,
   image,
-  shouldScroll = true
-) {
+  shouldScroll=true
+){
 
   const div =
-    document.createElement(
-      "div"
-    );
-
+    document.createElement("div");
 
   div.className =
     "chat-message user-message";
 
 
-  if (image) {
+  if(image){
 
     const img =
-      document.createElement(
-        "img"
-      );
-
+      document.createElement("img");
 
     img.src =
       image;
 
-
     img.className =
       "message-image";
 
-
-    div.appendChild(
-      img
-    );
+    div.appendChild(img);
 
   }
 
 
-  if (text) {
+  if(text){
 
     const textDiv =
-      document.createElement(
-        "div"
-      );
-
+      document.createElement("div");
 
     textDiv.textContent =
       text;
 
-
-    div.appendChild(
-      textDiv
-    );
+    div.appendChild(textDiv);
 
   }
 
 
-  chatHistory.appendChild(
-    div
-  );
+  chatHistory.appendChild(div);
 
 
-  if (shouldScroll) {
+  if(shouldScroll){
+
     scrollToBottom();
+
   }
 
 }
 
 
-/* ============================================================
-   MESSAGGIO AI
-   ============================================================ */
-
 function addAIMessage(
   text,
-  shouldScroll = true
-) {
+  shouldScroll=true
+){
 
   const div =
-    document.createElement(
-      "div"
-    );
-
+    document.createElement("div");
 
   div.className =
     "chat-message ai-message";
 
-
   div.innerHTML =
-    formatAnswer(
-      text
-    );
+    formatAnswer(text);
+
+  chatHistory.appendChild(div);
 
 
-  chatHistory.appendChild(
-    div
-  );
+  if(shouldScroll){
 
-
-  if (shouldScroll) {
     scrollToBottom();
+
   }
 
 }
 
 
-/* ============================================================
-   FORMATTAZIONE RISPOSTE
-   ============================================================ */
+/* FORMAT RISPOSTE */
 
-function formatAnswer(text) {
-
-  /*
-   * Prima separiamo i blocchi di codice.
-   * Questo evita che formule e codice vengano
-   * trasformati in HTML in modo sbagliato.
-   */
+function formatAnswer(text){
 
   const blocks = [];
-
 
   let safe =
     String(text);
@@ -2366,18 +1764,18 @@ function formatAnswer(text) {
   safe =
     safe.replace(
       /```(?:[a-zA-Z0-9_+#.-]+)?\s*([\s\S]*?)```/g,
-      function(match, code) {
+      function(match,code){
 
         const id =
-          "___CODE_BLOCK_" +
-          blocks.length +
+          "___CODE_BLOCK_"
+          +
+          blocks.length
+          +
           "___";
-
 
         blocks.push(
           code.trim()
         );
-
 
         return id;
 
@@ -2385,19 +1783,9 @@ function formatAnswer(text) {
     );
 
 
-  /*
-   * Sicurezza
-   */
-
   safe =
-    escapeHtml(
-      safe
-    );
+    escapeHtml(safe);
 
-
-  /*
-   * Titoli
-   */
 
   safe =
     safe.replace(
@@ -2413,20 +1801,12 @@ function formatAnswer(text) {
     );
 
 
-  /*
-   * Grassetto
-   */
-
   safe =
     safe.replace(
       /\*\*(.*?)\*\*/g,
       "<strong>$1</strong>"
     );
 
-
-  /*
-   * Liste
-   */
 
   safe =
     safe.replace(
@@ -2435,10 +1815,6 @@ function formatAnswer(text) {
     );
 
 
-  /*
-   * A capo
-   */
-
   safe =
     safe.replace(
       /\n/g,
@@ -2446,26 +1822,22 @@ function formatAnswer(text) {
     );
 
 
-  /*
-   * Ripristina blocchi codice.
-   */
-
   blocks.forEach(
-    function(code, index) {
+    function(code,index){
 
       const placeholder =
-        "___CODE_BLOCK_" +
-        index +
+        "___CODE_BLOCK_"
+        +
+        index
+        +
         "___";
 
-
       const html =
-        "<pre><code>" +
-        escapeHtml(
-          code
-        ) +
+        "<pre><code>"
+        +
+        escapeHtml(code)
+        +
         "</code></pre>";
-
 
       safe =
         safe.replace(
@@ -2482,59 +1854,28 @@ function formatAnswer(text) {
 }
 
 
-/* ============================================================
-   SICUREZZA
-   ============================================================ */
-
-function escapeHtml(text) {
+function escapeHtml(text){
 
   return String(text)
-
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-
-    .replace(
-      /</g,
-      "&lt;"
-    )
-
-    .replace(
-      />/g,
-      "&gt;"
-    )
-
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-
-    .replace(
-      /'/g,
-      "&#039;"
-    );
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 
 }
 
 
-/* ============================================================
-   SCROLL
-   ============================================================ */
+/* SCROLL */
 
-function scrollToBottom() {
+function scrollToBottom(){
 
   setTimeout(
-    function() {
+    function(){
 
       window.scrollTo({
-
-        top:
-          document.body.scrollHeight,
-
-        behavior:
-          "smooth"
-
+        top:document.body.scrollHeight,
+        behavior:"smooth"
       });
 
     },
@@ -2544,68 +1885,55 @@ function scrollToBottom() {
 }
 
 
-/* ============================================================
-   MATERIE
-   ============================================================ */
+/* MATERIE */
 
 document
   .querySelectorAll(".subject")
-  .forEach(
-    subject => {
+  .forEach(subject=>{
 
-      subject.addEventListener(
-        "click",
-        function() {
+    subject.addEventListener(
+      "click",
+      function(){
 
-          document
-            .querySelectorAll(
-              ".subject"
-            )
-            .forEach(
-              s =>
-                s.classList.remove(
-                  "active"
-                )
-            );
-
-
-          this.classList.add(
-            "active"
+        document
+          .querySelectorAll(".subject")
+          .forEach(
+            s =>
+              s.classList.remove(
+                "active"
+              )
           );
 
+        this.classList.add("active");
 
-          selectedSubject =
-            this.textContent.trim();
+        selectedSubject =
+          this.textContent.trim();
 
+        if(currentChat){
 
-          if (currentChat) {
+          currentChat.subject =
+            selectedSubject;
 
-            currentChat.subject =
-              selectedSubject;
-
-            saveChat();
-
-          }
+          saveChat();
 
         }
-      );
 
-    }
-  );
+      }
+    );
+
+  });
 
 
-/* ============================================================
-   ENTER
-   ============================================================ */
+/* ENTER */
 
 question.addEventListener(
   "keydown",
-  function(event) {
+  function(event){
 
-    if (
-      event.key === "Enter" &&
+    if(
+      event.key==="Enter" &&
       !event.shiftKey
-    ) {
+    ){
 
       event.preventDefault();
 
@@ -2617,9 +1945,7 @@ question.addEventListener(
 );
 
 
-/* ============================================================
-   AVVIO
-   ============================================================ */
+/* AVVIO */
 
 initializeApp();
 
